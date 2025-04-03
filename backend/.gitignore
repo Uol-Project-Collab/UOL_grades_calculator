@@ -1,0 +1,8 @@
+# Firebase
+firebase-service-account.json
+
+# Environment
+.env
+
+# Dependencies
+node_modules/
