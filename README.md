@@ -128,7 +128,7 @@ git push origin feature/your-feature-name
 	- Link the relevant Jira issue (e.g., "Closes UGC-123").
 
 5. Request Reviews: Tag relevant team members or mention in Slack that your PR is ready for review.
-6. Approval Required: The PR must be approved by at least three (3) designated project members before it can be merged into main.
+6. Approval Required: The PR must be approved by the team lead before it can be merged into main.
 7. Address Feedback: Make any necessary changes based on the review comments.
 8. Merge: Once approved, a maintainer will merge the PR. (IDK, can this be automated?)
 
@@ -143,15 +143,14 @@ The technology stack chosen for the initial development sprint is:
     *   Vanilla JavaScript (or potentially a simple framework if agreed upon by the team)
 *   **Backend:**
     *   Node.js
-    *   Express.js
-    *   JavaScript
+    *   Google Firebase 
 *   **Version Control:** Git & GitHub
 *   **Project Management:** Jira ([UGC Project Board](https://hyderdevop.atlassian.net/jira/software/projects/UGC/boards/34/backlog))
 *   **Communication:** Slack (#js_project_collab) & Discord 
 
 
 ## License
-(I didn't see a license, not sure if we have one or using one)
+TBD
 
 ## Contact
 - Project Lead / Maintainers:  
