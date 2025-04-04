@@ -10,31 +10,49 @@
 
   <link rel="stylesheet" href="css/styles.css">
 
-  <script src="js/button.js" defer></script>
+  <script src="js/script.js" defer></script>
 </head>
 
 <body>
   <header class="header-section">
-    <h1>Header Section</h1>
+    <h1>University of London Grades Calculator</h1>
   </header>
   <main class="main-section">
-    <section class="content-section">
-      <h2>Content Section</h2>
-      <p>This is a simple content section.</p>
-    </section>
-
     <section class="module-management-section">
-      <h2>Module Management</h2>
-      <button id="addModuleBtn">Add Module</button>
-      
-      <!-- Display area for the modules -->
-      <div id="moduleList">
-        <!-- Modules will be displayed here -->
+      <div class="form-container">
+        <h2>Grade Modules</h2>
+        <div id="messageDisplay"></div>
+
+        <!-- Step 1 -->
+        <div id="step1">
+          <label>Select Levels:</label>
+
+          <!-- Checkboxes for level selection -->
+          <div class="checkbox-group" id="levelsCheckboxGroup">
+            <label><input type="checkbox" value="4"> Level 4</label>
+            <label><input type="checkbox" value="5"> Level 5</label>
+            <label><input type="checkbox" value="6"> Level 6</label>
+          </div>
+          <button id="nextStep">Next</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" style="display:none;">
+          <h3>Modules for Selected Levels</h3>
+
+          <!-- Scrollable module list -->
+          <div id="moduleList" class="module-list">
+            <!-- Modules will be dynamically added here -->
+          </div>
+
+          <button id="backButton">Back</button>
+          <button id="submitGrades">Submit Grades</button>
+        </div>
       </div>
     </section>
   </main>
   <footer class="footer-section">
-    <p>Footer Section</p>
+    <p>&copy; 2025 University of London</p>
   </footer>
 </body>
 </html>
