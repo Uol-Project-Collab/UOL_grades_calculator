@@ -14,9 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api', moduleRoutes);
 
-// Error handling
-app.use(errorHandler);
-
 app.get('/api/test-firebase', async (req, res) => {
     try {
       const docRef = db.collection('test').doc('connection');
