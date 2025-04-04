@@ -196,7 +196,9 @@ function handleSubmitGrades() {
 
   clearMessage();
   console.log(modulesData); // Replace with actual submission logic (API call).
-  console.log(`Grades submitted successfully:\n${modulesData.map(d => `${d.moduleName}: ${d.grade}`).join("\n")}`);
+  const filledModules = modulesData.filter(data => data.grade !== null); // Exclude modules without input
+  localStorage.setItem("submittedModules", JSON.stringify(filledModules)); // Store valid modules in localStorage
+  console.log(`Grades submitted successfully:\n${filledModules.map(d => `${d.moduleName}: ${d.grade}`).join("\n")}`);
   resetForm();
 }
 
