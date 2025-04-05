@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User document access control
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Modules subcollection rules
+      match /modules/{moduleId} {
+        // Base read/write permissions
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+
+        // Strict create validation
+        allow create: if request.resource.data.keys().hasAll([
+            'name', 
+            'grade', 
+            'level', 
+            'isRPL'
+          ]) &&
+          request.resource.data.name is string &&
+          request.resource.data.name.size() >= 3 &&
+          request.resource.data.grade is number &&
+          request.resource.data.grade >= 0 &&
+          request.resource.data.grade <= 100 &&
+          request.resource.data.level is number &&
+          request.resource.data.level in [4, 5, 6] &&
+          request.resource.data.isRPL is bool;
+
+        // Update validation
+        allow update: if request.resource.data.name is string &&
+          request.resource.data.name.size() >= 3 &&
+          request.resource.data.grade is number &&
+          request.resource.data.grade >= 0 &&
+          request.resource.data.grade <= 100 &&
+          request.resource.data.level is number &&
+          request.resource.data.level in [4, 5, 6];
+      }
+    }
+
+    // Collection group query security
+    match /{path=**}/modules/{moduleId} {
+      allow list: if request.auth != null && 
+          request.auth.uid == get(/databases/$(database)/documents/$(path)).data.userId;
+    }
+  }
+}

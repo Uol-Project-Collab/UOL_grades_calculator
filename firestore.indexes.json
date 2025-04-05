@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "modules",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "level", "order": "ASCENDING"}, 
+        {"fieldPath": "name", "order": "ASCENDING"},   
+        {"fieldPath": "grade", "order": "ASCENDING"},
+        {"fieldPath": "isRPL", "order": "ASCENDING"}    
+      ]
+    }
+  ]
+}
