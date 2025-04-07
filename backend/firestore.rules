@@ -1,47 +1,39 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // User document access control
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-
-      // Modules subcollection rules
-      match /modules/{moduleId} {
-        // Base read/write permissions
-        allow read: if request.auth.uid == userId;
-        allow write: if request.auth.uid == userId;
-
-        // Strict create validation
-        allow create: if request.resource.data.keys().hasAll([
-            'name', 
-            'grade', 
-            'level', 
-            'isRPL'
-          ]) &&
-          request.resource.data.name is string &&
-          request.resource.data.name.size() >= 3 &&
-          request.resource.data.grade is number &&
-          request.resource.data.grade >= 0 &&
-          request.resource.data.grade <= 100 &&
-          request.resource.data.level is number &&
-          request.resource.data.level in [4, 5, 6] &&
-          request.resource.data.isRPL is bool;
-
-        // Update validation
-        allow update: if request.resource.data.name is string &&
-          request.resource.data.name.size() >= 3 &&
-          request.resource.data.grade is number &&
-          request.resource.data.grade >= 0 &&
-          request.resource.data.grade <= 100 &&
-          request.resource.data.level is number &&
-          request.resource.data.level in [4, 5, 6];
-      }
+    // Students can only access their own document
+    match /students/{studentId} {
+      allow read, write: if request.auth != null && request.auth.uid == studentId;
     }
 
-    // Collection group query security
-    match /{path=**}/modules/{moduleId} {
-      allow list: if request.auth != null && 
-          request.auth.uid == get(/databases/$(database)/documents/$(path)).data.userId;
+    // Students can manage their grades subcollection
+    match /students/{studentId}/grades/{gradeId} {
+      allow read, write: if request.auth != null && request.auth.uid == studentId;
+
+      // Validation for grade documents
+      allow create: if request.resource.data.keys().hasAll([
+          'moduleCode',
+          'moduleInfo',
+          'grade',
+          'isRPL'
+        ]) &&
+        request.resource.data.moduleCode is string &&
+        request.resource.data.moduleInfo.name is string &&
+        request.resource.data.moduleInfo.level is number &&
+        request.resource.data.grade is number &&
+        request.resource.data.grade >= 0 &&
+        request.resource.data.grade <= 100 &&
+        request.resource.data.isRPL is bool;
+
+      allow update: if request.resource.data.grade is number &&
+        request.resource.data.grade >= 0 &&
+        request.resource.data.grade <= 100;
+    }
+
+    // Modules are read-only for everyone
+    match /modules/{moduleId} {
+      allow read: if true;
+      allow write: if false; // Admin-only via Firebase Admin SDK
     }
   }
 }

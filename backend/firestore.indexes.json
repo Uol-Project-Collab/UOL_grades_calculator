@@ -1,13 +1,17 @@
 {
   "indexes": [
     {
-      "collectionGroup": "modules",
+      "collectionGroup": "grades",
       "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "level", "order": "ASCENDING"}, 
-        {"fieldPath": "name", "order": "ASCENDING"},   
-        {"fieldPath": "grade", "order": "ASCENDING"},
-        {"fieldPath": "isRPL", "order": "ASCENDING"}    
+        { "fieldPath": "moduleCode", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "modules",
+      "fields": [
+        { "fieldPath": "level", "order": "ASCENDING" },
+        { "fieldPath": "code", "order": "ASCENDING" }
       ]
     }
   ]
