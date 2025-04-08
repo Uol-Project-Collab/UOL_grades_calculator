@@ -37,12 +37,21 @@ const modulesByLevel = {
   ]
 };
 
+// Clear localStorage on page load/refresh
+window.addEventListener('load', () => {
+  localStorage.clear();
+  console.log('localStorage cleared on page refresh');
+});
+
 // Global element references.
 const levelsCheckboxGroup = document.getElementById("levelsCheckboxGroup");
 const nextStepButton = document.getElementById("nextStep");
 const backButton = document.getElementById("backButton");
+const addModuleBtn = document.getElementById("addModuleBtn");
+const showCurrentModuleBtn = document.getElementById("showCurrentModuleBtn");
 const step1Div = document.getElementById("step1");
 const step2Div = document.getElementById("step2");
+const currentModules = document.getElementById("currentModules");
 const moduleListDiv = document.getElementById("moduleList");
 const submitGradesButton = document.getElementById("submitGrades");
 let messageDisplay = document.getElementById("messageDisplay");
@@ -95,13 +104,38 @@ function createModuleItem(moduleName) {
   label.textContent = moduleName;
 
   const gradeInput = document.createElement("input");
-  gradeInput.type = "number";
+  gradeInput.type = "text"; // Changed from "number" to "text"
   gradeInput.placeholder = "Grade";
-  gradeInput.min = "0";
-  gradeInput.max = "100";
+  gradeInput.pattern = "[0-9]*"; // helps with mobile numeric keyboard
+
+  // Get existing module data from localStorage
+  const existingModules = JSON.parse(localStorage.getItem("submittedModules")) || [];
+  const existingModule = existingModules.find(module => module.moduleName === moduleName);
+  
+  // If module exists, prefill the input and handle RPL case
+  if (existingModule) {
+    if (existingModule.grade === "RPL") {
+      rplCheckbox.checked = true;
+      gradeInput.disabled = true;
+    } else {
+      gradeInput.value = existingModule.grade || "";
+    }
+  }
+  
+  // Input validation on the fly
+  gradeInput.addEventListener("input", (e) => {
+    const value = e.target.value.trim();
+    if (value && !/^\d+$/.test(value)) {
+      e.target.value = value.replace(/[^\d]/g, "");
+      showMessage("Please enter a valid number.", "error")
+    } else {
+      clearMessage();
+    }
+  });
 
   const rplCheckbox = document.createElement("input");
   rplCheckbox.type = "checkbox";
+
   // Disable grade input when RPL is checked.
   rplCheckbox.addEventListener("change", () => {
     gradeInput.disabled = rplCheckbox.checked;
@@ -127,6 +161,7 @@ function handleNextStep() {
   }
   clearMessage();
   step1Div.style.display = "none";
+  showCurrentModuleBtn.style.display = "none";
   step2Div.style.display = "block";
   populateModules(selectedLevels);
 }
@@ -137,6 +172,7 @@ function handleNextStep() {
 function handleBack() {
   step2Div.style.display = "none";
   step1Div.style.display = "block";
+  showCurrentModuleBtn.style.display = "block";
   clearMessage();
 }
 
@@ -170,7 +206,7 @@ function populateModules(levels) {
 function handleSubmitGrades() {
   const modulesData = Array.from(moduleListDiv.querySelectorAll(".module-item")).map(item => {
     const moduleName = item.querySelector("label").textContent;
-    const gradeInput = item.querySelector('input[type="number"]');
+    const gradeInput = item.querySelector('input[type="text"]');
     const rplCheckbox = item.querySelector('input[type="checkbox"]');
     let grade = "";
     if (rplCheckbox.checked) {
@@ -195,10 +231,27 @@ function handleSubmitGrades() {
   }
 
   clearMessage();
-  console.log(modulesData); // Replace with actual submission logic (API call).
-  const filledModules = modulesData.filter(data => data.grade !== null); // Exclude modules without input
-  localStorage.setItem("submittedModules", JSON.stringify(filledModules)); // Store valid modules in localStorage
-  console.log(`Grades submitted successfully:\n${filledModules.map(d => `${d.moduleName}: ${d.grade}`).join("\n")}`);
+  
+  // Get existing modules from localStorage
+  const existingModules = JSON.parse(localStorage.getItem("submittedModules")) || [];
+
+  // Filter out modules that are being updated
+  const uniqueExistingModules = existingModules.filter(existingModule => {
+    return !modulesData.some(newModule => 
+      newModule.moduleName === existingModule.moduleName
+    );
+  });
+  
+  // Combine existing modules with new modules (excluding null grades)
+  const filledModules = [
+    ...uniqueExistingModules,
+    ...modulesData.filter(data => data.grade !== null)
+  ];
+  
+  // Save combined data to localStorage
+  localStorage.setItem("submittedModules", JSON.stringify(filledModules));
+  
+  showMessage("Grades submitted successfully!", "success");
   resetForm();
 }
 
@@ -206,14 +259,70 @@ function handleSubmitGrades() {
  * Resets the form to its initial state, including UI elements and messages.
  */
 function resetForm() {
-  step1Div.style.display = "block";
+  step1Div.style.display = "none";
   step2Div.style.display = "none";
   levelsCheckboxGroup.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
   moduleListDiv.innerHTML = "";
+  addModuleBtn.style.display = "block";
+  showCurrentModuleBtn.style.display = "block";
+}
+
+function handleAddModules(){
+  step1Div.style.display = "block";
+  step2Div.style.display = "none";
+  addModuleBtn.style.display = "none";
+  showCurrentModuleBtn.style.display = "block";
+  currentModules.style.display = "none";
+}
+
+function handleShowCurrentModules() {
+  const submittedModules = JSON.parse(localStorage.getItem("submittedModules")) || [];
+  const moduleListDisplay = document.getElementById("moduleListDisplay");
+  const currentModules = document.getElementById("currentModules");
+  
+  // Clear previous content
+  moduleListDisplay.innerHTML = "";
+  
+  if (submittedModules.length === 0) {
+    showMessage("No modules submitted yet.", "error");
+    currentModules.style.display = "none";
+    return;
+  }
+  
   clearMessage();
+
+  // Create and append modules to the list
+  submittedModules.forEach(module => {
+    const listItem = document.createElement("li");
+    listItem.className = "d-module-item";
+    
+    // Create module name span
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = module.moduleName;
+    nameSpan.className = "d-module-name";
+    
+    // Create grade span
+    const gradeSpan = document.createElement("span");
+    gradeSpan.textContent = `Grade: ${module.grade}`;
+    gradeSpan.className = "d-module-grade";
+    
+    // Append elements to list item
+    listItem.appendChild(nameSpan);
+    listItem.appendChild(gradeSpan);
+    
+    // Append list item to the display list
+    moduleListDisplay.appendChild(listItem);
+  });
+
+  currentModules.style.display = "block";
+  addModuleBtn.style.display = "block";
+  step1Div.style.display = "none";
+  step2Div.style.display = "none";
 }
 
 // Attach event listeners for user interactions.
 nextStepButton.addEventListener("click", handleNextStep);
 backButton.addEventListener("click", handleBack);
 submitGradesButton.addEventListener("click", handleSubmitGrades);
+addModuleBtn.addEventListener("click", handleAddModules);
+showCurrentModuleBtn.addEventListener("click", handleShowCurrentModules);

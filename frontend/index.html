@@ -17,14 +17,22 @@
   <header class="header-section">
     <h1>University of London Grades Calculator</h1>
   </header>
+
+  <div id="messageDisplay"></div>
+
   <main class="main-section">
     <section class="module-management-section">
       <div class="form-container">
-        <h2>Grade Modules</h2>
-        <div id="messageDisplay"></div>
+        <button id="showCurrentModuleBtn">Your Current Modules</button>
+        <button id="addModuleBtn">Add Modules</button>
+
+        <div id="currentModules" class="module-list" style="display:none;">
+          <h3>Your Current Modules</h3>
+          <ul id="moduleListDisplay"></ul>
+        </div>
 
         <!-- Step 1 -->
-        <div id="step1">
+        <div id="step1" style="display:none;">
           <label>Select Levels:</label>
 
           <!-- Checkboxes for level selection -->
