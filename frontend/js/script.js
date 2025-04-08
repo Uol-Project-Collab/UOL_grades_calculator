@@ -108,7 +108,9 @@ function createModuleItem(moduleData, level) {
 
   // Get existing module data from localStorage
   const existingModules = JSON.parse(localStorage.getItem("submittedModules")) || [];
-  const existingModule = existingModules.find(existingModule => existingModule.name === moduleData.name);
+  const existingModule = existingModules.find(module => 
+    module.moduleCode === moduleData.code
+  );
   
   // If module exists, prefill the input and handle RPL case
   if (existingModule) {
