@@ -51,7 +51,7 @@ body {
   display: inline-block;
   width: calc(50% - 10px);
 }
-.module-item input[type="number"] {
+.module-item input[type="text"] {
   width: calc(30% - 10px);
 }
 .module-item input[type="checkbox"] {
@@ -82,6 +82,41 @@ body {
   margin-right: -340px; /* Add spacing between checkbox and label text */
 }
 
-#messageDisplay {
+.error {
   color: red;
+  margin-bottom: 5px;
+}
+
+.success {
+  color: green;
+  margin-bottom: 5px;
+}
+
+/* Current Modules Display Styles */
+#currentModules {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+#moduleListDisplay {
+  list-style-type: none;
+  padding: 0;
+}
+
+.d-module-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.d-module-name {
+  font-weight: bold;
+}
+
+.d-module-grade {
+  color: green;
+  font-weight: bold;
 }
