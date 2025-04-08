@@ -1,47 +1,41 @@
 // Mapping of module names grouped by level.
 const modulesByLevel = {
   "4": [
-    "Introduction to Programming 1",
-    "Introduction to Programming 2",
-    "Computational Mathematics",
-    "Discrete Mathematics",
-    "How Computers Work",
-    "Algorithms and Data Structures",
-    "Web Development",
-    "Fundamentals of Computer Science"
+    { code: "CM1005", name: "Introduction to Programming 1" },
+    { code: "CM1010", name: "Introduction to Programming 2" },
+    { code: "CM1015", name: "Computational Mathematics" },
+    { code: "CM1020", name: "Discrete Mathematics" },
+    { code: "CM1030", name: "How Computers Work" },
+    { code: "CM1035", name: "Algorithms and Data Structures" },
+    { code: "CM1040", name: "Web Development" },
+    { code: "CM1025", name: "Fundamentals of Computer Science" }
   ],
   "5": [
-    "Professional Practice for Computer Science",
-    "Algorithms and Data Structures 2",
-    "Computer Security",
-    "Databases, Networks and the Web",
-    "Graphics Programming",
-    "Object Oriented Programming",
-    "Programming with Data",
-    "Software Design and Development"
+    { code: "CM2045", name: "Professional Practice for Computer Science" },
+    { code: "CM2035", name: "Algorithms and Data Structures 2" },
+    { code: "CM2025", name: "Computer Security" },
+    { code: "CM2040", name: "Databases, Networks and the Web" },
+    { code: "CM2030", name: "Graphics Programming" },
+    { code: "CM2005", name: "Object Oriented Programming" },
+    { code: "CM2015", name: "Programming with Data" },
+    { code: "CM2010", name: "Software Design and Development" }
   ],
   "6": [
-    "3D Graphics and Animation",
-    "Advanced Web Development",
-    "Artificial Intelligence",
-    "Data Science",
-    "Databases and Advanced Data Techniques",
-    "Games Development",
-    "Intelligent Signal Processing",
-    "Interaction Design",
-    "Machine Learning and Neural Networks",
-    "Mobile Development",
-    "Natural Language Processing",
-    "Physical Computing and Internet of Things",
-    "Virtual Reality"
+    { code: "CM3045", name: "3D Graphics and Animation" },
+    { code: "CM3035", name: "Advanced Web Development" },
+    { code: "CM3020", name: "Artificial Intelligence" },
+    { code: "CM3005", name: "Data Science" },
+    { code: "CM3010", name: "Databases and Advanced Data Techniques" },
+    { code: "CM3030", name: "Games Development" },
+    { code: "CM3065", name: "Intelligent Signal Processing" },
+    { code: "CM3055", name: "Interaction Design" },
+    { code: "CM3015", name: "Machine Learning and Neural Networks" },
+    { code: "CM3050", name: "Mobile Development" },
+    { code: "CM3060", name: "Natural Language Processing" },
+    { code: "CM3040", name: "Physical Computing and Internet of Things" },
+    { code: "CM3025", name: "Virtual Reality" }
   ]
 };
-
-// Clear localStorage on page load/refresh
-window.addEventListener('load', () => {
-  localStorage.clear();
-  console.log('localStorage cleared on page refresh');
-});
 
 // Global element references.
 const levelsCheckboxGroup = document.getElementById("levelsCheckboxGroup");
@@ -93,15 +87,19 @@ function getSelectedLevels() {
 /**
  * Creates and returns a DOM element for a module item.
  * This includes a label, a numeric grade input, and an RPL checkbox.
- * @param {string} moduleName - The name of the module.
+ * @param {Object} moduleData - The module data object containing code and name.
+ * @param {string} level - The level of the module.
  * @returns {HTMLElement} The module item element.
  */
-function createModuleItem(moduleName) {
+function createModuleItem(moduleData, level) {
   const moduleItemDiv = document.createElement("div");
   moduleItemDiv.className = "module-item";
+  moduleItemDiv.dataset.level = level;
+  moduleItemDiv.dataset.code = moduleData.code;
+  moduleItemDiv.dataset.name = moduleData.name;
 
   const label = document.createElement("label");
-  label.textContent = moduleName;
+  label.textContent = `[${moduleData.code}] ${moduleData.name}`;
 
   const gradeInput = document.createElement("input");
   gradeInput.type = "text"; // Changed from "number" to "text"
@@ -190,8 +188,8 @@ function populateModules(levels) {
       const levelHeader = document.createElement("h4");
       levelHeader.textContent = `Level ${level}`;
       moduleListDiv.appendChild(levelHeader);
-      modules.forEach(moduleName => {
-        const moduleItem = createModuleItem(moduleName);
+      modules.forEach(moduleData => {
+        const moduleItem = createModuleItem(moduleData, level);
         moduleListDiv.appendChild(moduleItem);
       });
     }
@@ -205,9 +203,12 @@ function populateModules(levels) {
  */
 function handleSubmitGrades() {
   const modulesData = Array.from(moduleListDiv.querySelectorAll(".module-item")).map(item => {
-    const moduleName = item.querySelector("label").textContent;
+    const moduleName = item.dataset.name;
+    const moduleCode = item.dataset.code;
+    const level = item.dataset.level;
     const gradeInput = item.querySelector('input[type="text"]');
     const rplCheckbox = item.querySelector('input[type="checkbox"]');
+
     let grade = "";
     if (rplCheckbox.checked) {
       grade = "RPL";
@@ -216,7 +217,13 @@ function handleSubmitGrades() {
     } else {
       grade = gradeInput.value;
     }
-    return { moduleName, grade };
+
+    return {
+      level,
+      moduleCode,
+      moduleName,
+      grade
+    };
   });
 
   const invalidGrades = modulesData.some(data => {
@@ -326,3 +333,11 @@ backButton.addEventListener("click", handleBack);
 submitGradesButton.addEventListener("click", handleSubmitGrades);
 addModuleBtn.addEventListener("click", handleAddModules);
 showCurrentModuleBtn.addEventListener("click", handleShowCurrentModules);
+
+document.getElementById('resetAllBtn').addEventListener('click', () => {
+  if (confirm('Are you sure you want to clear all saved module data?')) {
+    localStorage.clear();
+    showMessage('All data has been cleared', 'success');
+    location.reload();
+  }
+});
