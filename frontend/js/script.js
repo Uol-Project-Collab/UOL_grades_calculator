@@ -106,6 +106,10 @@ function createModuleItem(moduleData, level) {
   gradeInput.placeholder = "Grade";
   gradeInput.pattern = "[0-9]*"; // helps with mobile numeric keyboard
 
+   //creating rlpCheck before the use.
+  const rplCheckbox = document.createElement("input");
+  rplCheckbox.type = "checkbox";
+
   // Get existing module data from localStorage
   const existingModules = JSON.parse(localStorage.getItem("submittedModules")) || [];
   const existingModule = existingModules.find(module => 
@@ -132,9 +136,6 @@ function createModuleItem(moduleData, level) {
       clearMessage();
     }
   });
-
-  const rplCheckbox = document.createElement("input");
-  rplCheckbox.type = "checkbox";
 
   // Disable grade input when RPL is checked.
   rplCheckbox.addEventListener("change", () => {
