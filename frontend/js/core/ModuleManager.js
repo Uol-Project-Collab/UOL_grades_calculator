@@ -21,7 +21,7 @@ class ModuleManager {
    * @param {string} level - The level associated with the module.
    * @returns {HTMLElement} The module item element.
    */
-  createModuleItem(moduleData, level) {
+  async createModuleItem(moduleData, level) {
       const moduleItemDiv = document.createElement("div");
       moduleItemDiv.className = "module-item";
       moduleItemDiv.dataset.level = level;
@@ -107,7 +107,7 @@ class ModuleManager {
    * @param {HTMLElement} containerElement - The DOM element containing module items.
    * @returns {Array} Array of module data objects.
    */
-  getModulesData(containerElement) {
+  async getModulesData(containerElement) {
       const items = containerElement.querySelectorAll(".module-item");
       const modulesData = Array.from(items).map(item => {
           const moduleName = item.dataset.name;
@@ -131,6 +131,17 @@ class ModuleManager {
               moduleName,
               grade
           };
+      });
+
+      try {
+        await this.storageService.getSubmittedModules(modulesData);
+      } catch (error) {
+        console.error('Error saving module:', error);
+      }
+
+      return modulesData;
+  }
+}
       });
 
       return modulesData;
