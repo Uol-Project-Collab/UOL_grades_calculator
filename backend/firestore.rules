@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Students can only access their own document
+    match /students/{studentId} {
+      allow read, write: if request.auth != null && request.auth.uid == studentId;
+    }
+
+    // Students can manage their grades subcollection
+    match /students/{studentId}/grades/{gradeId} {
+      allow read, write: if request.auth != null && request.auth.uid == studentId;
+
+      // Validation for grade documents
+      allow create: if request.resource.data.keys().hasAll([
+          'moduleCode',
+          'moduleInfo',
+          'grade',
+          'isRPL'
+        ]) &&
+        request.resource.data.moduleCode is string &&
+        request.resource.data.moduleInfo.name is string &&
+        request.resource.data.moduleInfo.level is number &&
+        request.resource.data.grade is number &&
+        request.resource.data.grade >= 0 &&
+        request.resource.data.grade <= 100 &&
+        request.resource.data.isRPL is bool;
+
+      allow update: if request.resource.data.grade is number &&
+        request.resource.data.grade >= 0 &&
+        request.resource.data.grade <= 100;
+    }
+
+    // Modules are read-only for everyone
+    match /modules/{moduleId} {
+      allow read: if true;
+      allow write: if false; // Admin-only via Firebase Admin SDK
+    }
+  }
+}
