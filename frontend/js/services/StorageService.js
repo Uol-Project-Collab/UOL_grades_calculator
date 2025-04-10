@@ -9,22 +9,52 @@ class StorageService {
    * Retrieves the submitted modules array from localStorage.
    * @returns {Array} The array of submitted modules.
    */
-  getSubmittedModules() {
-      return JSON.parse(localStorage.getItem("submittedModules")) || [];
+  async getSubmittedModules() {
+
+    try {
+      const response = await fetch('api/submitted-modules');
+      return await response.json();
+      //return JSON.parse(localStorage.getItem("submittedModules")) || [];
+    }
+    catch (error) {
+      console.error('Error fetching submited modules:', error);
+      return[];
+    }
   }
 
   /**
    * Stores the modules array in localStorage.
    * @param {Array} modules - The modules array to store.
    */
-  setSubmittedModules(modules) {
-      localStorage.setItem("submittedModules", JSON.stringify(modules));
+  async setSubmittedModules(modules) {
+    try {
+      const response = await fetch('api/submitted-modules', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        
+        },
+        body: JSON.stringify(modules),
+      });
+      //localStorage.setItem("submittedModules", JSON.stringify(modules));
+      if(!response.ok) throw new Error('Failed to save modules');
+    } catch(error) {
+      console.error('Error saving submitted module:', error);
+    }
   }
 
   /**
    * Clears all submitted modules from localStorage.
    */
-  clearSubmittedModules() {
-      localStorage.removeItem("submittedModules");
+  async clearSubmittedModules() {
+    try {
+      const response = await fetch('/api/submitted-modules', {
+        method: 'DELETE',
+      });
+      if(!response.ok) throw new Error('Failed to clear modules');
+      //localStorage.removeItem("submittedModules");
+    } catch (error) {
+      console.error('Error clearing submited modules:', error);
+    }
   }
 }
