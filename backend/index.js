@@ -3,6 +3,7 @@ const { db } = require('./config/firebase'); // Import Admin Firestore instance
 const express = require('express');
 const cors = require('cors');
 const moduleRoutes = require('./routes/moduleRoutes');
+const gradesRoutes = require("./routes/avgGradesRoutes");
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', moduleRoutes);
+app.use("/api", gradesRoutes);
+
 
 app.get('/api/test-firebase', async (req, res) => {
   try {
@@ -26,6 +29,7 @@ app.get('/api/test-firebase', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
