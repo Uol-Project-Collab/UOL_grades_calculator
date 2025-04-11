@@ -7,17 +7,22 @@ const getModules = async (req, res) => {
     let query = db.collection("modules");
 
     // Handle level filtering
-    if (req.query.levels) {
-      const levels = req.query.levels.split(",").map(Number);
-      query = query.where("level", "in", levels);
+    if (req.query.level) {
+      const levels = req.query.level.split(",")
+        .map(level => parseInt(level, 10))
+        .filter(level => !isNaN(level));
+
+      if (levels.length > 0) {
+        query = query.where("level", "in", levels);
+      }
     }
+
 
     const modulesSnapshot = await query.get();
 
     const modules = modulesSnapshot.docs.map((doc) => ({
       moduleCode: doc.id,
-      moduleName: doc.data().name,
-      weight: doc.data().weight,
+      moduleName: doc.data().moduleName,
       level: doc.data().level,
     }));
 
