@@ -16,8 +16,7 @@ const getModules = async (req, res) => {
 
     const modules = modulesSnapshot.docs.map((doc) => ({
       moduleCode: doc.id,
-      moduleName: doc.data().name,
-      weight: doc.data().weight,
+      moduleName: doc.data().moduleName,
       level: doc.data().level,
     }));
 
