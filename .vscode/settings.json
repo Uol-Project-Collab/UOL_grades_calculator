@@ -1,0 +1,16 @@
+/*
+  This is only to make comments look better and more readability.
+  Source: https://stackoverflow.com/questions/43657779/is-there-a-way-to-italicize-comments-in-visual-studio-code
+*/
+{
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "comment",
+        "settings": {
+          "fontStyle": "italic"
+        }
+      }
+    ]
+  }
+}
