@@ -148,24 +148,29 @@ const editModule = async (req, res) => {
     const { params, body } = req;
     const { studentId, moduleId } = params;
 
-    await db.runTransaction(async (transaction) => {
+    const updatedModule = await db.runTransaction(async (transaction) => {
       // Get student
       const studentRef = db.collection("students").doc(studentId);
       const studentDoc = await transaction.get(studentRef);
-      if (!studentDoc.exists)
-        return res.status(404).json({ error: "Student not found" });
+      if (!studentDoc.exists) {
+        const err = new Error("Student not found");
+        err.statusCode = 404;
+        throw err;
+      }
 
       // Find the module to update
       const { modules } = studentDoc.data();
       if (!modules || !Array.isArray(modules)) {
-        return res
-          .status(500)
-          .json({ error: "Modules data is corrupt or missing" });
+        const err = new Error("Modules data is corrupt or missing");
+        err.statusCode = 500;
+        throw err;
       }
 
       const moduleIdx = modules.findIndex((m) => m.moduleCode === moduleId);
       if (moduleIdx === -1) {
-        return res.status(404).json({ error: "Module not found" });
+        const err = new Error("Module not found");
+        err.statusCode = 404;
+        throw err;
       }
 
       // Update module
@@ -176,18 +181,22 @@ const editModule = async (req, res) => {
       };
 
       transaction.update(studentRef, { modules: updatedModules });
+      return updatedModules[moduleIdx];
+    });
 
-      return res.status(200).json({
-        message: "Module updated successfully",
-        module: updatedModules[moduleIdx],
-      });
+    res.status(200).json({
+      message: "Module updated successfully",
+      module: updatedModule,
     });
   } catch (error) {
     console.error("PUT /students/:studentId/modules/:moduleId error:", error);
-    res.status(500).json({
-      error: "Failed to edit module",
-      details: process.env.NODE_ENV === "development" ? error.message : null,
-    });
+
+    const statusCode = error.statusCode || 500;
+    const errorMessage = error.message || "An unexpected error occurred";
+    const respJson = { error: errorMessage };
+    if (process.env.NODE_ENV === "development") respJson.details = error;
+
+    res.status(statusCode).json(respJson);
   }
 };
 
