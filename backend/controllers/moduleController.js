@@ -8,15 +8,15 @@ const getModules = async (req, res) => {
 
     // Handle level filtering
     if (req.query.level) {
-      const levels = req.query.level.split(",")
-        .map(level => parseInt(level, 10))
-        .filter(level => !isNaN(level));
+      const levels = req.query.level
+        .split(",")
+        .map((level) => parseInt(level, 10))
+        .filter((level) => !isNaN(level));
 
       if (levels.length > 0) {
         query = query.where("level", "in", levels);
       }
     }
-
 
     const modulesSnapshot = await query.get();
 
@@ -39,10 +39,10 @@ const getModules = async (req, res) => {
 // 2. Add module to student
 const addModule = async (req, res) => {
   try {
-
     // Check username
     const studentId = req.params.studentId;
-    if (!studentId) return res.status(400).json({ error: "Student ID required" });
+    if (!studentId)
+      return res.status(400).json({ error: "Student ID required" });
 
     // Validate request body
     const { moduleCode, grade } = req.body;
@@ -53,7 +53,8 @@ const addModule = async (req, res) => {
     // Get student document by username
     const studentRef = db.collection("students").doc(studentId);
     const studentDoc = await studentRef.get();
-    if (!studentDoc.exists) return res.status(404).json({ error: "Student not found" });
+    if (!studentDoc.exists)
+      return res.status(404).json({ error: "Student not found" });
 
     // Get module document
     const moduleDoc = await db.collection("modules").doc(moduleCode).get();
@@ -73,7 +74,7 @@ const addModule = async (req, res) => {
     // Check if student already has this module
     const studentData = studentDoc.data();
     const currentModules = studentData.modules || [];
-    const duplicate = currentModules.find(m => m.moduleCode === moduleCode);
+    const duplicate = currentModules.find((m) => m.moduleCode === moduleCode);
     if (duplicate) {
       return res.status(409).json({ error: "Module already added" });
     }
@@ -95,7 +96,6 @@ const addModule = async (req, res) => {
       message: "Module added successfully",
       module: newModule,
     });
-
   } catch (error) {
     console.error("POST /students/:id/modules error:", error);
     res.status(500).json({
@@ -108,15 +108,16 @@ const addModule = async (req, res) => {
 // 3. Get student's modules
 const getUserModules = async (req, res) => {
   try {
-
     // Check username
     const studentId = req.params.studentId;
-    if (!studentId) return res.status(400).json({ error: "Student username required" });
+    if (!studentId)
+      return res.status(400).json({ error: "Student username required" });
 
     // Get student document by username
     const studentRef = db.collection("students").doc(studentId);
     const studentDoc = await studentRef.get();
-    if (!studentDoc.exists) return res.status(404).json({ error: "Student not found" });
+    if (!studentDoc.exists)
+      return res.status(404).json({ error: "Student not found" });
 
     const studentData = studentDoc.data();
 
@@ -124,7 +125,7 @@ const getUserModules = async (req, res) => {
     const studentModules = studentData.modules || [];
 
     // Return the list of modules with code, name, and grade
-    const modulesResponse = studentModules.map(module => ({
+    const modulesResponse = studentModules.map((module) => ({
       moduleCode: module.moduleCode,
       moduleName: module.moduleName,
       grade: module.grade,
@@ -140,4 +141,56 @@ const getUserModules = async (req, res) => {
   }
 };
 
-module.exports = { getModules, addModule, getUserModules };
+// 4. Edit student's modules
+const editModule = async (req, res) => {
+  try {
+    // Get params and body
+    const { params, body } = req;
+    const { studentId, moduleId } = params;
+
+    await db.runTransaction(async (transaction) => {
+      // Get student
+      const studentRef = db.collection("students").doc(studentId);
+      const studentDoc = await transaction.get(studentRef);
+      if (!studentDoc.exists)
+        return res.status(404).json({ error: "Student not found" });
+
+      // Find the module to update
+      const { modules } = studentDoc.data();
+      if (!modules || !Array.isArray(modules)) {
+        return res
+          .status(500)
+          .json({ error: "Modules data is corrupt or missing" });
+      }
+
+      const moduleIdx = modules.findIndex((m) => m.moduleCode === moduleId);
+      if (moduleIdx === -1) {
+        return res.status(404).json({ error: "Module not found" });
+      }
+
+      // Update module
+      const updatedModules = [...modules];
+      updatedModules[moduleIdx] = {
+        ...updatedModules[moduleIdx],
+        ...body,
+      };
+
+      transaction.update(studentRef, { modules: updatedModules });
+
+      return res.status(200).json({
+        message: "Module updated successfully",
+        module: updatedModules[moduleIdx],
+      });
+    });
+  } catch (error) {
+    console.error("PUT /students/:studentId/modules/:moduleId error:", error);
+    res.status(500).json({
+      error: "Failed to edit module",
+      details: process.env.NODE_ENV === "development" ? error.message : null,
+    });
+  }
+};
+
+module.exports = { getModules, addModule, getUserModules, editModule };
+
+// cspell: ignore firestore
