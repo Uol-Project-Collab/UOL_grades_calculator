@@ -5,6 +5,7 @@ const {
   addModule,
   getUserModules,
   editModule,
+  deleteModule,
 } = require("../controllers/moduleController");
 const {
   validateModuleParams,
@@ -20,12 +21,19 @@ router.post("/students/:studentId/modules", addModule);
 // 3. Get modules for a specific student (using student ID) TODO: what's the studentId in DB??
 router.get("/students/:studentId/modules", getUserModules);
 
-// 4. Edit a student module (using student ID and module ID)
+// 4. Edit a student module (using student ID and moduleCode)
 router.put(
   "/students/:studentId/modules/:moduleCode",
   validateModuleParams,
   validateModuleBody,
   editModule
+);
+
+// 5. Delete a student module (using student ID and moduleCode)
+router.delete(
+  "/students/:studentId/modules/:moduleCode",
+  validateModuleParams,
+  deleteModule
 );
 
 module.exports = router;
