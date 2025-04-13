@@ -146,7 +146,7 @@ const editModule = async (req, res) => {
   try {
     // Get params and body
     const { params, body } = req;
-    const { studentId, moduleId } = params;
+    const { studentId, moduleCode } = params;
 
     const updatedModule = await db.runTransaction(async (transaction) => {
       // Get student
@@ -166,8 +166,8 @@ const editModule = async (req, res) => {
         throw err;
       }
 
-      const moduleIdx = modules.findIndex((m) => m.moduleCode === moduleId);
-      if (moduleIdx === -1) {
+      const moduleCodex = modules.findIndex((m) => m.moduleCode === moduleCode);
+      if (moduleCodex === -1) {
         const err = new Error("Module not found");
         err.statusCode = 404;
         throw err;
@@ -175,13 +175,13 @@ const editModule = async (req, res) => {
 
       // Update module
       const updatedModules = [...modules];
-      updatedModules[moduleIdx] = {
-        ...updatedModules[moduleIdx],
+      updatedModules[moduleCodex] = {
+        ...updatedModules[moduleCodex],
         ...body,
       };
 
       transaction.update(studentRef, { modules: updatedModules });
-      return updatedModules[moduleIdx];
+      return updatedModules[moduleCodex];
     });
 
     res.status(200).json({
@@ -189,7 +189,7 @@ const editModule = async (req, res) => {
       module: updatedModule,
     });
   } catch (error) {
-    console.error("PUT /students/:studentId/modules/:moduleId error:", error);
+    console.error("PUT /students/:studentId/modules/:moduleCode error:", error);
 
     const statusCode = error.statusCode || 500;
     const errorMessage = error.message || "An unexpected error occurred";

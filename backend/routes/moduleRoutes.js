@@ -22,7 +22,7 @@ router.get("/students/:studentId/modules", getUserModules);
 
 // 4. Edit a student module (using student ID and module ID)
 router.put(
-  "/students/:studentId/modules/:moduleId",
+  "/students/:studentId/modules/:moduleCode",
   validateModuleParams,
   validateModuleBody,
   editModule

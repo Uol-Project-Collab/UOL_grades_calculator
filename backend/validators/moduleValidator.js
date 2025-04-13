@@ -4,8 +4,8 @@ const paramsSchema = Joi.object({
   studentId: Joi.string().required().messages({
     "any.required": "Student ID required",
   }),
-  moduleId: Joi.string().required().messages({
-    "any.required": "Module ID is required",
+  moduleCode: Joi.string().required().messages({
+    "any.required": "Module Code is required",
   }),
 });
 
