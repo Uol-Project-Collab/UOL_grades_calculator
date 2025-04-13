@@ -166,8 +166,8 @@ const editModule = async (req, res) => {
         throw err;
       }
 
-      const moduleCodex = modules.findIndex((m) => m.moduleCode === moduleCode);
-      if (moduleCodex === -1) {
+      const moduleIdx = modules.findIndex((m) => m.moduleCode === moduleCode);
+      if (moduleIdx === -1) {
         const err = new Error("Module not found");
         err.statusCode = 404;
         throw err;
@@ -175,13 +175,13 @@ const editModule = async (req, res) => {
 
       // Update module
       const updatedModules = [...modules];
-      updatedModules[moduleCodex] = {
-        ...updatedModules[moduleCodex],
+      updatedModules[moduleIdx] = {
+        ...updatedModules[moduleIdx],
         ...body,
       };
 
       transaction.update(studentRef, { modules: updatedModules });
-      return updatedModules[moduleCodex];
+      return updatedModules[moduleIdx];
     });
 
     res.status(200).json({
