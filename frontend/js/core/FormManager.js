@@ -117,6 +117,9 @@ class FormManager {
    * Handles the UI transition to add new modules.
    */
   handleAddModules() {
+      if (modulesByLevel.length === 0) {
+        alert("Please wait until the modules are loaded.");
+      }
       this.step1Div.style.display = "block";
       this.step2Div.style.display = "none";
       this.addModuleBtn.style.display = "none";
