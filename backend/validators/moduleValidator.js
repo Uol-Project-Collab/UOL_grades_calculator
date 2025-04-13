@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const paramsSchema = Joi.object({
   studentId: Joi.string().required().messages({
-    "any.required": "Student username required",
+    "any.required": "Student ID required",
   }),
   moduleId: Joi.string().required().messages({
     "any.required": "Module ID is required",
