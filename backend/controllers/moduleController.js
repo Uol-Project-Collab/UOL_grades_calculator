@@ -240,7 +240,7 @@ const deleteModule = async (req, res) => {
       transaction.update(studentRef, { modules: updatedModules });
     });
 
-    res.status(204).json();
+    res.status(204).end();
   } catch (error) {
     console.error(
       "DELETE /students/:studentId/modules/:moduleCode error:",
