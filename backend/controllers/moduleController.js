@@ -243,7 +243,7 @@ const deleteModule = async (req, res) => {
     res.status(204).json();
   } catch (error) {
     console.error(
-      "PUT /students/:studentId/modules/:moduleCode error:",
+      "DELETE /students/:studentId/modules/:moduleCode error:",
       error.message
     );
 
