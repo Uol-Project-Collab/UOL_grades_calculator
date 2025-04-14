@@ -189,7 +189,10 @@ const editModule = async (req, res) => {
       module: updatedModule,
     });
   } catch (error) {
-    console.error("PUT /students/:studentId/modules/:moduleCode error:", error);
+    console.error(
+      "PUT /students/:studentId/modules/:moduleCode error:",
+      error.message
+    );
 
     const statusCode = error.statusCode || 500;
     const errorMessage = error.message || "An unexpected error occurred";
@@ -200,6 +203,65 @@ const editModule = async (req, res) => {
   }
 };
 
-module.exports = { getModules, addModule, getUserModules, editModule };
+// 5. Delete the student's modules
+const deleteModule = async (req, res) => {
+  try {
+    // Get params and body
+    const { params } = req;
+    const { studentId, moduleCode } = params;
+
+    await db.runTransaction(async (transaction) => {
+      // Get student
+      const studentRef = db.collection("students").doc(studentId);
+      const studentDoc = await transaction.get(studentRef);
+      if (!studentDoc.exists) {
+        const err = new Error("Student not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      // Find the module to delete
+      const { modules } = studentDoc.data();
+      if (!modules || !Array.isArray(modules)) {
+        const err = new Error("Modules data is corrupt or missing");
+        err.statusCode = 500;
+        throw err;
+      }
+
+      const hasModule = modules.some((m) => m.moduleCode === moduleCode);
+      if (!hasModule) {
+        const err = new Error("Module not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      // Delete module
+      const updatedModules = modules.filter((m) => m.moduleCode !== moduleCode);
+      transaction.update(studentRef, { modules: updatedModules });
+    });
+
+    res.status(204).end();
+  } catch (error) {
+    console.error(
+      "DELETE /students/:studentId/modules/:moduleCode error:",
+      error.message
+    );
+
+    const statusCode = error.statusCode || 500;
+    const errorMessage = error.message || "An unexpected error occurred";
+    const respJson = { error: errorMessage };
+    if (process.env.NODE_ENV === "development") respJson.details = error;
+
+    res.status(statusCode).json(respJson);
+  }
+};
+
+module.exports = {
+  getModules,
+  addModule,
+  getUserModules,
+  editModule,
+  deleteModule,
+};
 
 // cspell: ignore firestore
