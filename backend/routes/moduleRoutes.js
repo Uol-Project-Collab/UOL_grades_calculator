@@ -18,7 +18,7 @@ router.get("/modules", getModules);
 // 2. Add module to a specific student (using student ID)
 router.post("/students/:studentId/modules", addModule);
 
-// 3. Get modules for a specific student (using student ID) TODO: what's the studentId in DB??
+// 3. Get modules for a specific student
 router.get("/students/:studentId/modules", getUserModules);
 
 // 4. Edit a student module (using student ID and moduleCode)

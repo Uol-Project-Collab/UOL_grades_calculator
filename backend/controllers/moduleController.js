@@ -1,5 +1,6 @@
 const { db } = require("../config/firebase");
 const admin = require("firebase-admin");
+const { validateModule } = require("../models/module"); // Import validation function
 
 // 1. Get all modules with level filtering
 const getModules = async (req, res) => {
@@ -39,68 +40,117 @@ const getModules = async (req, res) => {
 // 2. Add module to student
 const addModule = async (req, res) => {
   try {
-    // Check username
     const studentId = req.params.studentId;
-    if (!studentId)
-      return res.status(400).json({ error: "Student ID required" });
+    if (!studentId) return res.status(400).json({ error: "Student ID required" });
 
-    // Validate request body
-    const { moduleCode, grade } = req.body;
-    if (!moduleCode || grade === undefined) {
-      return res.status(400).json({ error: "Missing required fields" });
+    // Validate request body structure
+    const { modules } = req.body;
+    if (!Array.isArray(modules) || modules.length === 0) {
+      return res.status(400).json({ error: "Modules array required" });
     }
 
-    // Get student document by username
-    const studentRef = db.collection("students").doc(studentId);
-    const studentDoc = await studentRef.get();
-    if (!studentDoc.exists)
-      return res.status(404).json({ error: "Student not found" });
-
-    // Get module document
-    const moduleDoc = await db.collection("modules").doc(moduleCode).get();
-    if (!moduleDoc.exists) {
-      console.error(`Module ${moduleCode} not found`);
-      return res.status(400).json({ error: "Invalid module code" });
-    }
-
-    const moduleData = moduleDoc.data();
-    if (!moduleData.moduleName || !moduleData.level) {
-      return res.status(500).json({
-        error: "Module data is corrupted in Firestore",
-        details: `Missing fields in module ${moduleCode}`,
+    // Validate individual module format
+    const invalidModules = modules.filter(m => 
+      !m.moduleCode || typeof m.grade !== "string"
+    );
+    
+    if (invalidModules.length > 0) {
+      return res.status(400).json({
+        error: "Invalid module format",
+        details: "Each module must contain moduleCode (string) and grade (string)"
       });
     }
 
-    // Check if student already has this module
-    const studentData = studentDoc.data();
-    const currentModules = studentData.modules || [];
-    const duplicate = currentModules.find((m) => m.moduleCode === moduleCode);
-    if (duplicate) {
-      return res.status(409).json({ error: "Module already added" });
+    const studentRef = db.collection("students").doc(studentId);
+    const studentDoc = await studentRef.get();
+    if (!studentDoc.exists) return res.status(404).json({ error: "Student not found" });
+
+    // Get existing modules
+    const existingModules = studentDoc.data().modules || [];
+    const existingModuleCodes = new Set(existingModules.map(m => m.moduleCode));
+
+    // Process modules in transaction
+    const { updatedModules, errors } = await db.runTransaction(async (transaction) => {
+      const newModules = [];
+      const errorList = [];
+
+      for (const { moduleCode, grade } of modules) {
+        try {
+          // Format and validate grade
+          const formattedGrade = grade.trim().toUpperCase();
+          
+          if (!validateModule(formattedGrade)) {
+            errorList.push(`${moduleCode}: Invalid grade '${grade}'. Must be 'RPL' or 0.00-100.00`);
+            continue;
+          }
+
+          // Check duplicate in current request
+          if (newModules.some(m => m.moduleCode === moduleCode)) {
+            errorList.push(`${moduleCode}: Duplicate in request`);
+            continue;
+          }
+
+          // Check existing student modules
+          if (existingModuleCodes.has(moduleCode)) {
+            errorList.push(`${moduleCode}: Already exists for student`);
+            continue;
+          }
+
+          // Verify module exists in system
+          const moduleDoc = await transaction.get(db.collection("modules").doc(moduleCode));
+          if (!moduleDoc.exists) {
+            errorList.push(`${moduleCode}: Module not found`);
+            continue;
+          }
+
+          // Validate module data integrity
+          const moduleData = moduleDoc.data();
+          if (!moduleData.moduleName || !moduleData.level) {
+            errorList.push(`${moduleCode}: Corrupted module data`);
+            continue;
+          }
+
+          // Add valid module
+          newModules.push({
+            moduleCode,
+            moduleName: moduleData.moduleName,
+            level: moduleData.level,
+            grade: formattedGrade
+          });
+        } catch (error) {
+          errorList.push(`${moduleCode}: Processing error - ${error.message}`);
+        }
+      }
+
+      if (errorList.length > 0) return { errors: errorList };
+
+      // Update student document
+      transaction.update(studentRef, {
+        modules: [...existingModules, ...newModules]
+      });
+
+      return { updatedModules: newModules };
+    });
+
+    if (errors) {
+      return res.status(400).json({
+        error: "Partial success: Some modules failed",
+        details: errors,
+        addedCount: updatedModules?.length || 0
+      });
     }
 
-    // Create new module object
-    const newModule = {
-      moduleCode,
-      moduleName: moduleData.moduleName,
-      level: moduleData.level,
-      grade,
-    };
-
-    // Add the new module to the student's modules array
-    await studentRef.update({
-      modules: admin.firestore.FieldValue.arrayUnion(newModule),
+    return res.status(201).json({
+      message: `${updatedModules.length} modules added successfully`,
+      addedModules: updatedModules,
+      totalModules: existingModules.length + updatedModules.length
     });
 
-    res.status(201).json({
-      message: "Module added successfully",
-      module: newModule,
-    });
   } catch (error) {
     console.error("POST /students/:id/modules error:", error);
-    res.status(500).json({
-      error: "Failed to add module",
-      details: process.env.NODE_ENV === "development" ? error.message : null,
+    return res.status(500).json({
+      error: "Failed to add modules",
+      details: process.env.NODE_ENV === "development" ? error.message : null
     });
   }
 };
