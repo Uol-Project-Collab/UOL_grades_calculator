@@ -7,13 +7,12 @@ class FormManager {
   /**
    * Creates an instance of FormManager.
    * @param {ModuleManager} moduleManager - The ModuleManager instance.
-   * @param {StorageService} storageService - The StorageService instance.
    * @param {MessageService} messageService - The MessageService instance.
    */
-  constructor(moduleManager, storageService, messageService) {
+  constructor(moduleManager, messageService, moduleFetech) {
       this.moduleManager = moduleManager;
-      this.storageService = storageService;
       this.messageService = messageService;
+      this.moduleFetech = moduleFetech;
 
       // Caching DOM elements.
       this.levelsCheckboxGroup = document.getElementById("levelsCheckboxGroup");
@@ -82,7 +81,12 @@ class FormManager {
    * Submits the module grades after validating input values and updates storage.
    */
   handleSubmitGrades() {
-      const modulesData = this.moduleManager.getModulesData(this.moduleListDiv);
+      const modulesData = this.moduleManager.getModulesData(this.moduleListDiv).map(({ moduleCode, moduleName, level, grade }) => ({
+          moduleCode,
+          moduleName,
+          level: parseInt(level, 10), // Ensure level is an integer
+          grade
+      }));
 
       const invalidGrades = modulesData.some(data => {
           if (data.grade === "RPL" || data.grade === null) return false;
@@ -96,20 +100,26 @@ class FormManager {
       }
 
       this.messageService.clearMessage();
-      const existingModules = this.storageService.getSubmittedModules();
-
-      // Filter out modules that are being updated.
-      const uniqueExistingModules = existingModules.filter(existingModule =>
-          !modulesData.some(newModule => newModule.moduleName === existingModule.moduleName)
-      );
 
       const filledModules = [
-          ...uniqueExistingModules,
-          ...modulesData.filter(data => data.grade !== null)
+          ...modulesData.filter(data => data.grade !== null && data.moduleCode && data.moduleName && !isNaN(data.level))
       ];
 
-      this.storageService.setSubmittedModules(filledModules);
+      // Restructure the modules into a flat array
+      const restructuredData = filledModules.map(({ grade, level, moduleCode, moduleName }) => ({
+        moduleCode,
+        moduleName,
+        level: parseInt(level, 10), // Ensure level is an integer
+        grade
+      }));
+
+      // Wrap the restructured data in an object with a `modules` key
+      const payload = { modules: restructuredData };
+
+      this.moduleFetech.postSubmittedModules(payload);
       this.messageService.showMessage("Grades submitted successfully!", "success");
+
+      // Clear the form and reset the UI
       this.resetForm();
   }
 
@@ -117,7 +127,7 @@ class FormManager {
    * Handles the UI transition to add new modules.
    */
   handleAddModules() {
-      if (modulesByLevel.length === 0) {
+      if (Object.keys(modulesByLevel).length === 0) {
         alert("Please wait until the modules are loaded.");
       }
       this.step1Div.style.display = "block";
@@ -131,33 +141,33 @@ class FormManager {
    * Displays the list of current modules stored in localStorage.
    */
   handleShowCurrentModules() {
-      const submittedModules = this.storageService.getSubmittedModules();
       this.moduleListDisplay.innerHTML = "";
 
-      if (submittedModules.length === 0) {
-          this.messageService.showMessage("No modules submitted yet.", "error");
-          this.currentModules.style.display = "none";
-          return;
-      }
+      // Ensure submittedModules is an object with arrays as values
+      if (submittedModules && Object.keys(submittedModules).length > 0) {
+        // Iterate over each level's array of modules
+        Object.values(submittedModules).forEach(modulesArray => {
+          modulesArray.forEach(module => {
+            const listItem = document.createElement("li");
+            listItem.className = "d-module-item";
 
-      this.messageService.clearMessage();
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = module.name; // Use `name` instead of `moduleName`
+            nameSpan.className = "d-module-name";
 
-      submittedModules.forEach(module => {
-          const listItem = document.createElement("li");
-          listItem.className = "d-module-item";
+            const gradeSpan = document.createElement("span");
+            gradeSpan.textContent = `Grade: ${module.grade || "N/A"}`; // Handle missing grades
+            gradeSpan.className = "d-module-grade";
 
-          const nameSpan = document.createElement("span");
-          nameSpan.textContent = module.moduleName;
-          nameSpan.className = "d-module-name";
-
-          const gradeSpan = document.createElement("span");
-          gradeSpan.textContent = `Grade: ${module.grade}`;
-          gradeSpan.className = "d-module-grade";
-
-          listItem.appendChild(nameSpan);
-          listItem.appendChild(gradeSpan);
-          this.moduleListDisplay.appendChild(listItem);
-      });
+            listItem.appendChild(nameSpan);
+            listItem.appendChild(gradeSpan);
+            this.moduleListDisplay.appendChild(listItem);
+          });
+        });
+    } else {
+        this.messageService.showMessage("No modules submitted yet.", "error");
+        this.currentModules.style.display = "none";
+    }
 
       this.currentModules.style.display = "block";
       this.addModuleBtn.style.display = "block";
@@ -167,10 +177,11 @@ class FormManager {
 
   /**
    * Clears all stored module data after user confirmation and reloads the page.
+   * Not currently implemented.
    */
   handleResetAll() {
       if (confirm("Are you sure you want to clear all saved module data?")) {
-          this.storageService.clearSubmittedModules();
+          // this.storageService.clearSubmittedModules();
           this.messageService.showMessage("All data has been cleared", "success");
           location.reload();
       }

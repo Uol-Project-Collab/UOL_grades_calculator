@@ -92,6 +92,11 @@ body {
   margin-bottom: 5px;
 }
 
+.info {
+  color: blue;
+  margin-bottom: 5px;
+}
+
 /* Current Modules Display Styles */
 #currentModules {
   margin-top: 20px;

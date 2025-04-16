@@ -7,11 +7,9 @@
 class ModuleManager {
   /**
    * Creates an instance of ModuleManager.
-   * @param {StorageService} storageService - Service for localStorage operations.
    * @param {MessageService} messageService - Service to show and clear messages.
    */
-  constructor(storageService, messageService) {
-      this.storageService = storageService;
+  constructor(messageService) {
       this.messageService = messageService;
   }
 
@@ -42,9 +40,11 @@ class ModuleManager {
       const rplCheckbox = document.createElement("input");
       rplCheckbox.type = "checkbox";
 
-      // Retrieve module data from local storage and pre-populate if available.
-      const existingModules = this.storageService.getSubmittedModules();
-      const existingModule = existingModules.find(module => module.moduleCode === moduleData.code);
+      // Retrieve module data from global `submittedModules` and pre-populate if available.
+      let existingModule = null;
+      if (Array.isArray(submittedModules)) {
+          existingModule = submittedModules.find((module) => module.moduleCode === moduleData.code);
+      }
 
       if (existingModule) {
           if (existingModule.grade === "RPL") {
@@ -126,9 +126,9 @@ class ModuleManager {
           }
 
           return {
-              level,
               moduleCode,
               moduleName,
+              level: parseInt(level, 10),
               grade
           };
       });
