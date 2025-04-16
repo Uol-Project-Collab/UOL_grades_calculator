@@ -41,10 +41,14 @@ class ModuleManager {
     const rplCheckbox = document.createElement("input");
     rplCheckbox.type = "checkbox";
 
-    // Pre-populate the module item if it exists in the global `submittedModules`.
+    // Pre-populate the module item if it exists in the provided `submittedModules`.
     let existingModule = null;
-    if (Array.isArray(submittedModules)) {
-      existingModule = submittedModules.find((module) => module.moduleCode === moduleData.code);
+    if (submittedModules && Object.keys(submittedModules).length > 0) {
+      for (const [level, modules] of Object.entries(submittedModules)) {
+        for (const module of modules) {
+          if (module.code === moduleData.code) existingModule = module; // Find the existing module.
+        }
+      }
     }
 
     if (existingModule) {
