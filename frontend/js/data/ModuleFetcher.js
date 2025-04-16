@@ -1,37 +1,19 @@
 /**
- * @file fetchModules.js
- * @description Manages Computer Science module data organized by academic level (4, 5, 6)
+ * @file ModuleFetcher.js
+ * @description Manages Computer Science module data organized by academic level (4, 5, 6).
  * 
- * Provides:
- * - API fetching of module data
- * - Organization by level with string keys ("4", "5", "6")
- * - Consistent property naming (code/name)
- * - Error handling and logging
- * 
- * Expected API Data Format:
- * [
- *   {
- *     level: number,              // Academic level (4, 5, or 6)
- *     moduleCode: string,         // Official module code (e.g. "CM1005")
- *     moduleName: string          // Full module title
- *   },
- *   ...
- * ]
- * 
- * Output Structure:
- * {
- *   "4": [{code: string, name: string}, ...],  // Level 4 modules
- *   "5": [{code: string, name: string}, ...],  // Level 5 modules  
- *   "6": [{code: string, name: string}, ...]   // Level 6 modules
- * }
+ * Features:
+ * - Fetching module data from an API.
+ * - Organizing modules by academic level with consistent property naming.
+ * - Handling submitted modules and posting updates to the server.
+ * - Error handling and user feedback through MessageService.
  * 
  * @requires axios
- * @exports ModuleFetcher
  */
 
 /**
  * @class ModuleFetcher
- * @description Handles fetching and processing of module data from an API.
+ * @description Handles fetching, processing, and submitting module data from/to an API.
  */
 class ModuleFetcher {
   /**
@@ -40,79 +22,76 @@ class ModuleFetcher {
    */
   constructor(messageService) {
     this.messageService = messageService;
-
     this.submittedModules = {};
     this.modulesByLevel = {};
-
   }
 
   /**
-   * Fetches and organizes modules from the API.
+   * Fetches and processes module data from the API.
    * @async
-   * @function fetchModules
-   * @param {string} apiUrl - The base URL of the API to fetch module data.
+   * @param {string} apiUrl - The API endpoint URL.
    * @param {string} successMessage - Message to display on successful fetch.
    * @param {string} errorMessage - Message to display on fetch error.
-   * @param {string} method - HTTP method to use for the request (GET or POST).
-   * @param {object} data - Data to send with the request (for POST).
-   * @throws Will throw an error if the request fails.
+   * @param {string} method - HTTP method to use (GET or POST).
+   * @param {object} [data] - Data to send with the request (for POST).
    * @returns {Promise<object>} - A promise resolving to the restructured module data.
    */
-  async fetchModules(apiUrl, successMessage, errorMessage, method, data) {
+  async fetchModules(apiUrl, successMessage, errorMessage, method, data = null) {
     try {
-      const response = 
-        method === "POST"
-          ? await axios.post(apiUrl, data)
-          : method === "GET"
-            ? await axios.get(apiUrl)
-            : this.messageService.showMessage("Invalid method", "error");
+      const response = method === "POST"
+        ? await axios.post(apiUrl, data)
+        : await axios.get(apiUrl);
 
-      if (method === "POST") return; // No need to process data for POST requests
+      if (method === "POST") return; // No processing needed for POST requests
 
       const modules = response.data;
-      console.log(modules);  // Log the raw data for debugging
 
       // Restructure data by academic level
-      const restructuredData = {};
-      modules.forEach(module => {
-        const levelKey = module.level
-        if (!restructuredData[levelKey]) {
-          restructuredData[levelKey] = []; // Initialize array for new levels
-        }
-        restructuredData[levelKey].push({
-          code: module.moduleCode,  // Map moduleCode → code
-          name: module.moduleName,   // Map moduleName → name
-          grade: module.grade, // module.grade → grade
-          level: module.level // Add level for reference
+      const restructuredData = modules.reduce((acc, module) => {
+        const levelKey = module.level.toString();
+        if (!acc[levelKey]) acc[levelKey] = [];
+        acc[levelKey].push({
+          code: module.moduleCode,
+          name: module.moduleName,
+          grade: module.grade || null,
+          level: module.level
         });
-      });
+        return acc;
+      }, {});
 
       console.log(successMessage);
       return restructuredData;
     } catch (error) {
       console.error(errorMessage, error);
-      console.error("Server response:", error.response?.data || error.message);
+      console.error("Server Response:", error.response?.data || error.message);
       throw error;
     }
   }
 
+  /**
+   * Fetches all available modules from the API and organizes them by level.
+   * @async
+   */
   async fetchAllModules() {
     try {
       this.messageService.showMessage("Loading modules...", "info");
       this.modulesByLevel = await this.fetchModules(
         'http://localhost:3000/api/modules',
-        "Modules loaded successfully!",
+        "All Modules loaded successfully!",
         "Error loading modules!",
-        "GET",
-        null
+        "GET"
       );
       this.messageService.clearMessage();
     } catch (error) {
-      console.error("Error during module processing:", error);
+      console.error("Error fetching all modules:", error);
       this.messageService.showMessage("Failed to load modules.", "error");
     }
   }
 
+  /**
+   * Fetches submitted modules for a specific student from the API.
+   * @async
+   */
   async fetchSubmittedModules() {
     try {
       this.messageService.showMessage("Loading submitted modules...", "info");
@@ -120,16 +99,20 @@ class ModuleFetcher {
         'http://localhost:3000/api/students/test/modules/',
         "Submitted modules loaded successfully!",
         "Error loading submitted modules!",
-        "GET",
-        null
+        "GET"
       );
       this.messageService.clearMessage();
     } catch (error) {
-      console.error("Error during module processing:", error);
+      console.error("Error fetching submitted modules:", error);
       this.messageService.showMessage("Failed to load submitted modules.", "error");
     }
   }
 
+  /**
+   * Submits updated module data to the API.
+   * @async
+   * @param {object} dataObject - The data to be submitted.
+   */
   async postSubmittedModules(dataObject) {
     try {
       this.messageService.showMessage("Submitting modules...", "info");
@@ -142,8 +125,8 @@ class ModuleFetcher {
       );
       this.messageService.clearMessage();
     } catch (error) {
-      console.error("Error during module upload:", error);
-      this.messageService.showMessage("Failed to upload modules.", "error");
+      console.error("Error submitting modules:", error);
+      this.messageService.showMessage("Failed to submit modules.", "error");
     }
   }
 }

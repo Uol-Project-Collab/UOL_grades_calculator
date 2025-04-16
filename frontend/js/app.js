@@ -29,14 +29,12 @@ function initializeApp() {
   moduleFetcher.fetchAllModules()
       .then(() => {
         modulesByLevel = moduleFetcher.modulesByLevel; // Assign to global variable
-        console.log("Modules by Level:", modulesByLevel)
       })
       .catch(error => console.error("Error fetching all modules:", error));
 
   moduleFetcher.fetchSubmittedModules()
       .then(() => {
         submittedModules = moduleFetcher.submittedModules; // Assign to global variable
-        console.log("Submitted Modules:", submittedModules)
       })
       .catch(error => console.error("Error fetching submitted modules:", error));
 
