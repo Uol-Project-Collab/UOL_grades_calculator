@@ -14,6 +14,8 @@ let submittedModules = {};
  * @requires MessageService
  */
 function initializeApp() {
+  axios.defaults.timeout = 10000; // 10 seconds timeout
+
   const messageDisplay = document.getElementById("messageDisplay");
   const messageService = new MessageService(messageDisplay);
 
@@ -26,13 +28,13 @@ function initializeApp() {
   }
 
   // Fetch modules and log results
-  moduleFetcher.fetchAllModules()
+  moduleFetcher.fetchAllModules("test")
       .then(() => {
         modulesByLevel = moduleFetcher.modulesByLevel; // Assign to global variable
       })
       .catch(error => console.error("Error fetching all modules:", error));
 
-  moduleFetcher.fetchSubmittedModules()
+  moduleFetcher.fetchSubmittedModules("test")
       .then(() => {
         submittedModules = moduleFetcher.submittedModules; // Assign to global variable
       })
@@ -43,6 +45,13 @@ function initializeApp() {
   const formManager = new FormManager(moduleManager, messageService, moduleFetcher);
 
   formManager.init();
+
+  const averageGradeDisplay = new AverageGrade(messageService);
+  
+  // Delay the update to ensure submittedModules is populated.
+  setTimeout(() => {
+    averageGradeDisplay.updateAverageGrade("test");
+  }, 1500);
 }
 
 /*

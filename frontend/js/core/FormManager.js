@@ -104,15 +104,19 @@ class FormManager {
 
       this.messageService.clearMessage();
 
-      // Filter out invalid or incomplete module data.
-      const filledModules = [
-          ...modulesData.filter(data => data.grade !== null && data.moduleCode && data.moduleName && !isNaN(data.level))
-      ];
+      // Filter out invalid or incomplete module data and exclude existing modules from `submittedModules`.
+      const filledModules = modulesData.filter(data => {
+          const isValid = data.grade !== null && data.moduleCode && data.moduleName && !isNaN(data.level);
+          const isExisting = submittedModules && Object.values(submittedModules).some(modulesArray =>
+          modulesArray.some(module => module.code === data.moduleCode)
+          );
+          return isValid && !isExisting;
+      });
 
       // Wrap the restructured data in an object with a `modules` key.
       const payload = { modules: filledModules };
 
-      this.moduleFetech.postSubmittedModules(payload);
+      this.moduleFetech.postSubmittedModules(payload, "test");
       this.messageService.showMessage("Grades submitted successfully!", "success");
 
       // Clear the form and reset the UI.

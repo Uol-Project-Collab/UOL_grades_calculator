@@ -76,7 +76,7 @@ class ModuleFetcher {
     try {
       this.messageService.showMessage("Loading modules...", "info");
       this.modulesByLevel = await this.fetchModules(
-        'http://localhost:3000/api/modules',
+        "http://localhost:3000/api/modules",
         "All Modules loaded successfully!",
         "Error loading modules!",
         "GET"
@@ -91,12 +91,13 @@ class ModuleFetcher {
   /**
    * Fetches submitted modules for a specific student from the API.
    * @async
+   * @param {string} studentId - The ID of the student whose modules are to be fetched.
    */
-  async fetchSubmittedModules() {
+  async fetchSubmittedModules(studentId) {
     try {
       this.messageService.showMessage("Loading submitted modules...", "info");
       this.submittedModules = await this.fetchModules(
-        'http://localhost:3000/api/students/test/modules/',
+        `http://localhost:3000/api/students/${studentId}/modules/`,
         "Submitted modules loaded successfully!",
         "Error loading submitted modules!",
         "GET"
@@ -112,12 +113,13 @@ class ModuleFetcher {
    * Submits updated module data to the API.
    * @async
    * @param {object} dataObject - The data to be submitted.
+   * @param {string} studentId - The ID of the student whose modules are to be fetched.
    */
-  async postSubmittedModules(dataObject) {
+  async postSubmittedModules(dataObject, studentId) {
     try {
       this.messageService.showMessage("Submitting modules...", "info");
       await this.fetchModules(
-        'http://localhost:3000/api/students/test/modules/',
+        `http://localhost:3000/api/students/${studentId}/modules/`,
         "Modules submitted successfully!",
         "Error submitting modules!",
         "POST",

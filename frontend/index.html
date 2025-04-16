@@ -18,6 +18,7 @@
   <!-- Application Scripts -->
   <script src="js/services/MessageService.js" defer></script>
   <script src="js/data/ModuleFetcher.js" defer></script>
+  <script src="js/data/AverageGrade.js" defer></script>
   <script src="js/core/ModuleManager.js" defer></script>
   <script src="js/core/FormManager.js" defer></script>
   <script src="js/app.js" defer></script>
@@ -42,6 +43,8 @@
 
         <!-- Current Modules Section -->
         <div id="currentModules" class="module-list" style="display:none;">
+          <h3>Average Grade</h3>
+          <div id="averageGrade" class="grade-average"></div>
           <h3>Your Current Modules</h3>
           <ul id="moduleListDisplay"></ul>
         </div>

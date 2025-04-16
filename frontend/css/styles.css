@@ -125,3 +125,9 @@ body {
   color: green;
   font-weight: bold;
 }
+
+.grade-average {
+  color: blue;
+  margin: 20px 0; 
+  font-weight: bold;
+}
