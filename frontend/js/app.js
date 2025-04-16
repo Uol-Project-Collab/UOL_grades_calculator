@@ -1,17 +1,52 @@
-/**
- * App entry point for the application.
- * Initializes the necessary services and managers for the application to function.
- * This includes setting up the storage service, message service, module manager, and form manager.
- * The DOMContentLoaded event ensures that the script runs after the document is fully loaded.
- * This is crucial for ensuring that all elements are available for manipulation.
- */
-document.addEventListener("DOMContentLoaded", () => {
-    const storageService = new StorageService();
-    const messageDisplay = document.getElementById("messageDisplay");
-    const messageService = new MessageService(messageDisplay);
-    const moduleManager = new ModuleManager(storageService, messageService);
-    const formManager = new FormManager(moduleManager, storageService, messageService);
-  
-    formManager.init();
-});
+// Global variables for modulesByLevel and submittedModules
+let modulesByLevel = {};
+let submittedModules = {};
 
+/**
+ * @file App.js
+ * @description Entry point for the application.
+ * - Initializes the necessary services and managers for the application to function.
+ * - This includes setting up the storage service, message service, module manager, and form manager.
+ * - Handles the initialization of the ModuleFetcher to fetch module data from the API.
+ * @requires ModuleFetcher
+ * @requires ModuleManager
+ * @requires FormManager
+ * @requires MessageService
+ */
+function initializeApp() {
+  const messageDisplay = document.getElementById("messageDisplay");
+  const messageService = new MessageService(messageDisplay);
+
+  // Initialize and use the ModuleFetcher
+  const moduleFetcher = new ModuleFetcher(messageService);
+
+  if (!moduleFetcher) {
+      messageService.showMessage("ModuleFetcher initialization failed.", "error");
+      return;
+  }
+
+  // Fetch modules and log results
+  moduleFetcher.fetchAllModules()
+      .then(() => {
+        modulesByLevel = moduleFetcher.modulesByLevel; // Assign to global variable
+      })
+      .catch(error => console.error("Error fetching all modules:", error));
+
+  moduleFetcher.fetchSubmittedModules()
+      .then(() => {
+        submittedModules = moduleFetcher.submittedModules; // Assign to global variable
+      })
+      .catch(error => console.error("Error fetching submitted modules:", error));
+
+  // Initialize other managers
+  const moduleManager = new ModuleManager(messageService);
+  const formManager = new FormManager(moduleManager, messageService, moduleFetcher);
+
+  formManager.init();
+}
+
+/*
+* Ensures that the DOM is fully loaded before executing the initialization function.
+* This is crucial for ensuring that all elements are available for manipulation.
+*/ 
+document.addEventListener("DOMContentLoaded", initializeApp);
