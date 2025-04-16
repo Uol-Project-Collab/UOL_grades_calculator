@@ -114,7 +114,7 @@ class FormManager {
       });
 
       // Wrap the restructured data in an object with a `modules` key.
-      const payload = { modules: filledModules }
+      const payload = { modules: filledModules };
 
       this.moduleFetech.postSubmittedModules(payload, "test");
       this.messageService.showMessage("Grades submitted successfully!", "success");
