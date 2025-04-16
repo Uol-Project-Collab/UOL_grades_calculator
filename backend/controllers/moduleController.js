@@ -174,10 +174,11 @@ const getUserModules = async (req, res) => {
     // Get modules of the student
     const studentModules = studentData.modules || [];
 
-    // Return the list of modules with code, name, and grade
+    // Return the list of modules with code, name, level and grade
     const modulesResponse = studentModules.map((module) => ({
       moduleCode: module.moduleCode,
       moduleName: module.moduleName,
+      level: module.level,
       grade: module.grade,
     }));
 

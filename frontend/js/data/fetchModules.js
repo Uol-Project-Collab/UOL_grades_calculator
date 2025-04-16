@@ -1,5 +1,5 @@
 /**
- * @file modulesByLevel.js
+ * @file fetchModules.js
  * @description Manages Computer Science module data organized by academic level (4, 5, 6)
  * 
  * Provides:
@@ -42,29 +42,34 @@ const modulesByLevel = {};
  * - Groups modules under string-based level keys
  * - Handles and logs errors without breaking execution
  */
-const fetchModules = async () => {
+const fetchModules = async (apiUrl, successMessage, errorMessage, restructuredData) => {
   try {
-    const response = await axios.get('http://localhost:3000/api/modules');
+    const response = await axios.get(apiUrl);
     const modules = response.data;
 
-    // Process each module: group by level and transform properties
+    /**
+     *  Process to convert data structure
+     */
     modules.forEach(module => {
       const levelKey = module.level.toString(); // Ensure string key format
-      if (!modulesByLevel[levelKey]) {
-        modulesByLevel[levelKey] = []; // Initialize array for new levels
+      if (!restructuredData[levelKey]) {
+        restructuredData[levelKey] = []; // Initialize array for new levels
       }
-      modulesByLevel[levelKey].push({
+      restructuredData[levelKey].push({
         code: module.moduleCode,  // Map moduleCode → code
         name: module.moduleName   // Map moduleName → name
       });
     });
 
-    console.log('Module data successfully loaded');
-
+    console.log(successMessage);
   } catch (error) {
-    console.error('Module data fetch failed:', error);
+    console.error(errorMessage, error);
   }
 };
 
-// Initial data load
-fetchModules();
+fetchModules(
+  'http://localhost:3000/api/modules',
+  "Modules fetched successfully",
+  "Error fetching modules",
+  modulesByLevel
+);
