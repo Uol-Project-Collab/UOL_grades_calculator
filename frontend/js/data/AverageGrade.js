@@ -50,21 +50,34 @@ class AverageGrade {
   /**
    * Locally calculates the average grade from submittedModules.
    * Only includes modules with numeric grades (ignores "RPL" or null values).
+   * The weight mapping is:
+   *   Level 4: 15, Level 5: 45, Level 6: 75.
    * @returns {string} The calculated average grade (rounded to two decimals) or "N/A" if not calculable.
    */
   calculateAverageGrade() {
-    let total = 0;
-    let count = 0;
-    Object.values(submittedModules).forEach(modulesArray => {
+    let weightedSum = 0;
+    let totalWeight = 0;
+
+    // Use the level keys to apply weight.
+    const weightMapping = {
+      "4": 15,
+      "5": 45,
+      "6": 75
+    };
+
+    // Iterate using both level and modules array.
+    Object.entries(submittedModules).forEach(([level, modulesArray]) => {
+      const weight = weightMapping[level] || 1; // Default weight is 1 for unknown levels.
       modulesArray.forEach(module => {
         const grade = module.grade;
         if (grade && grade !== "RPL" && !isNaN(grade)) {
-          total += parseFloat(grade);
-          count++;
+          weightedSum += parseFloat(grade) * weight;
+          totalWeight += weight;
         }
       });
     });
-    return count ? (total / count).toFixed(2) : "N/A";
+    
+    return totalWeight ? (weightedSum / totalWeight).toFixed(2) : "N/A";
   }
 
   /**
