@@ -28,6 +28,8 @@ class FormManager {
       this.moduleListDiv = document.getElementById("moduleList");
       this.submitGradesButton = document.getElementById("submitGrades");
       this.moduleListDisplay = document.getElementById("moduleListDisplay");
+      this.savePdfBtn = document.getElementById("savePdfBtn");
+      // this.saveCsvBtn = document.getElementById("saveCsvBtn");
   }
 
   /**
@@ -39,6 +41,8 @@ class FormManager {
       this.submitGradesButton.addEventListener("click", () => this.handleSubmitGrades());
       this.addModuleBtn.addEventListener("click", () => this.handleAddModules());
       this.showCurrentModuleBtn.addEventListener("click", () => this.handleShowCurrentModules());
+      this.savePdfBtn.addEventListener("click", () => this.handleSaveModulesAsPDF(submittedModules, averageGrade));
+      // this.saveCsvBtn.addEventListener("click", () => this.handleSaveModulesAsCSV(submittedModules, averageGrade));
   }
 
   /**
@@ -178,6 +182,89 @@ class FormManager {
   }
 
   /**
+   * Saves provided modules data as a PDF file.
+   * Requires jsPDF library. Add this in your HTML head:
+   * @param {Array} modules - Array of module objects with moduleCode, moduleName, level, and grade.
+   * @param {string} averageGrade - The average grade to be included in the PDF.
+   */
+  handleSaveModulesAsPDF(modules, averageGrade) {
+    // Flatten modules object
+    if (!Array.isArray(modules)) {
+      modules = Object.values(modules).flat();
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add a background color
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setFillColor(240, 240, 240); // Light gray
+    doc.rect(0, 0, pageWidth, pageHeight, "F");
+
+    // Add a header with custom font and color
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(0, 102, 204); // Blue
+    doc.text("Modules Data Report", pageWidth / 2, 20, { align: "center" });
+
+    // Draw a horizontal line under the header
+    doc.setDrawColor(0, 102, 204); // Blue
+    doc.setLineWidth(1);
+    doc.line(20, 25, pageWidth - 20, 25);
+
+    // Use AutoTable to print a table with headings
+    doc.autoTable({
+      head: [['Code', 'Name', 'Level', 'Grade']],
+      body: modules.map(mod => [mod.code, mod.name, mod.level, mod.grade]),
+      startY: 35,
+      styles: { font: "helvetica", fontSize: 12 }
+    });
+
+    // Use AutoTable's final Y to position the average grade, if available
+    const lastY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY : 55;
+
+    // Display the average grade at the bottom right corner with decoration
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(0, 100, 0); // Dark Green
+    doc.text(`Average Grade: ${averageGrade}`, pageWidth - 20, lastY + 10, { align: "right" });
+
+    doc.save("modules.pdf");
+  }
+
+  /**
+   * Saves provided modules data as a CSV file.
+   * @param {Array} modules - Array of module objects with moduleCode, moduleName, level, and grade.
+   * @param {string} averageGrade - The average grade to be included in the CSV.
+   
+  handleSaveModulesAsCSV(modules, averageGrade) {
+    // Flatten modules object
+    if (!Array.isArray(modules)) {
+      modules = Object.values(modules).flat();
+    }
+
+    const headers = ["Module Code", "Module Name", "Level", "Grade"];
+    const csvRows = [];
+    csvRows.push(headers.join(","));
+    modules.forEach(mod => {
+        csvRows.push([mod.code, mod.name, mod.level, mod.grade].join(","));
+    });
+
+    csvRows.push(`Average Grade: ${averageGrade}`);
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "modules.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+    */
+
+  /**
    * Resets the UI form to its initial state.
    * Clears all selections and hides unnecessary sections.
    */
@@ -191,3 +278,6 @@ class FormManager {
       this.showCurrentModuleBtn.style.display = "block";
   }
 }
+
+// Expose to global scope
+window.FormManager = FormManager;

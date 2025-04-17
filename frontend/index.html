@@ -14,6 +14,8 @@
 
   <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
   <!-- Application Scripts -->
   <script src="js/services/MessageService.js" defer></script>
@@ -47,6 +49,8 @@
           <div id="averageGrade" class="grade-average"></div>
           <h3>Your Current Modules</h3>
           <ul id="moduleListDisplay"></ul>
+          <button id="savePdfBtn">Save PDF</button>
+          <!-- <button id="saveCsvBtn">Save CSV</button> -->
         </div>
 
         <!-- Step 1: Level Selection -->

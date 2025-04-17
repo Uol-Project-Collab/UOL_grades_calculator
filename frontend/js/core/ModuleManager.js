@@ -147,3 +147,6 @@ class ModuleManager {
     return modulesData;
   }
 }
+
+// Expose to global scope
+window.ModuleManager = ModuleManager;
