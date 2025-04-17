@@ -16,7 +16,8 @@
     "express": "^5.1.0",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
-    "joi": "^17.13.3"
+    "joi": "^17.13.3",
+    "nodemailer": "^6.10.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",

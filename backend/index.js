@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const moduleRoutes = require('./routes/moduleRoutes');
 const gradesRoutes = require("./routes/avgGradesRoutes");
+const emailRoutes = require("./routes/emailRoutes");
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api', moduleRoutes);
 app.use("/api", gradesRoutes);
-
+app.use("/api", emailRoutes);
 
 app.get('/api/test-firebase', async (req, res) => {
   try {

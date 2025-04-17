@@ -16,12 +16,14 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
 
   <!-- Application Scripts -->
   <script src="js/services/MessageService.js" defer></script>
   <script src="js/data/ModuleFetcher.js" defer></script>
   <script src="js/data/AverageGrade.js" defer></script>
   <script src="js/core/ModuleManager.js" defer></script>
+  <script src="js/services/EmailService.js" defer></script>
   <script src="js/core/FormManager.js" defer></script>
   <script src="js/app.js" defer></script>
 </head>
@@ -50,6 +52,7 @@
           <h3>Your Current Modules</h3>
           <ul id="moduleListDisplay"></ul>
           <button id="savePdfBtn">Save PDF</button>
+          <button id="sendEmailBtn">Send Email</button>
           <!-- <button id="saveCsvBtn">Save CSV</button> -->
         </div>
 

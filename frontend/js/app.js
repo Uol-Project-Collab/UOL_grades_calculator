@@ -43,7 +43,8 @@ function initializeApp() {
 
   // Initialize other managers
   const moduleManager = new ModuleManager(messageService);
-  const formManager = new FormManager(moduleManager, messageService, moduleFetcher);
+  const emailService = new EmailService();
+  const formManager = new FormManager(moduleManager, messageService, moduleFetcher, emailService);
 
   formManager.init();
 
