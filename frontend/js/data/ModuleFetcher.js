@@ -132,3 +132,6 @@ class ModuleFetcher {
     }
   }
 }
+
+// Expose to global scope
+window.ModuleFetcher = ModuleFetcher;

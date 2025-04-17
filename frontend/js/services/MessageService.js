@@ -36,3 +36,6 @@ class MessageService {
       this.messageDisplay.className = "";
   }
 }
+
+// Expose to global scope
+window.MessageService = MessageService;

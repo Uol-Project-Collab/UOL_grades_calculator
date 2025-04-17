@@ -100,22 +100,24 @@ class AverageGrade {
   async updateAverageGrade(studentId) {
     const backendAverage = await this.fetchBackendAverageGrade(studentId);
     const localAverage = this.calculateAverageGrade();
-    let finalAverage;
     
     if (backendAverage !== null) {
       if (backendAverage !== localAverage) {
-        finalAverage = localAverage;
+        averageGrade = localAverage;
         // Update the backend because local calculation is different.
-        await this.saveAverageGrade(studentId, finalAverage);
+        await this.saveAverageGrade(studentId, averageGrade);
       } else {
-        finalAverage = backendAverage;
+        averageGrade = backendAverage;
       }
     } else {
       // If no backend value, use the local average and send it.
-      finalAverage = localAverage;
-      await this.saveAverageGrade(studentId, finalAverage);
+      averageGrade = localAverage;
+      await this.saveAverageGrade(studentId, averageGrade);
     }
 
-    this.renderAverageGrade(finalAverage);
+    this.renderAverageGrade(averageGrade);
   }
 }
+
+// Expose to global scope
+window.AverageGrade = AverageGrade;

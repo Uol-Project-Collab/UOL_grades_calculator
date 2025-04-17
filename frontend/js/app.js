@@ -1,6 +1,7 @@
 // Global variables for modulesByLevel and submittedModules
 let modulesByLevel = {};
 let submittedModules = {};
+let averageGrade = null;
 
 /**
  * @file App.js
