@@ -8,7 +8,7 @@ exports.authenticate = async (req, res, next) => {
 
   const token = authHeader.split(' ')[1];
   try {
-    const decodedToken = await auth.verifyIdToken(token);
+    const decodedToken = await auth.verifyIdToken(token, /* checkRevoked */ true);
     const userDoc = await db.collection('students').doc(decodedToken.uid).get();
     if (!userDoc.exists) return res.status(403).json({ error: 'Student not registered' });
 

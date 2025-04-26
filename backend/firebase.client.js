@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut, sendPasswordResetEmail, confirmPasswordReset} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,5 +12,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+await signOut(auth);
+await sendPasswordResetEmail(auth, userEmail);
+alert('Password reset email sent! Check your inbox.');
+const { oobCode, newPassword } = req.body;
+await confirmPasswordReset(auth, oobCode, newPassword);
+alert('Password has been reset—please sign in with your new password.');
 
 export { auth };
