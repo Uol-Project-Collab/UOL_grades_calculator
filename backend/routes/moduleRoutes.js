@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const catchAsync = require("../utils/catchAsync");
+const {
+  validateAddModules,
+  validateModuleUpdate,
+} = require("../validators/moduleValidator");
 const {
   getModules,
   addModule,
@@ -7,33 +12,28 @@ const {
   editModule,
   deleteModule,
 } = require("../controllers/moduleController");
-const {
-  validateModuleParams,
-  validateModuleBody,
-} = require("../validators/moduleValidator");
 
-// 1. Get modules (with optional level filtering)
-router.get("/modules", getModules);
+// public list of all modules, optional ?level=
+router.get("/", catchAsync(getModules));
 
-// 2. Add module to a specific student (using student ID)
-router.post("/students/:studentId/modules", addModule);
+// add one or more modules for the authenticated user
+router.post(
+  "/",
+  validateAddModules, // <— now matches moduleValidator export
+  catchAsync(addModule)
+);
 
-// 3. Get modules for a specific student
-router.get("/students/:studentId/modules", getUserModules);
+// list my modules
+router.get("/mine", catchAsync(getUserModules));
 
-// 4. Edit a student module (using student ID and moduleCode)
+// edit a single module by code
 router.put(
-  "/students/:studentId/modules/:moduleCode",
-  validateModuleParams,
-  validateModuleBody,
-  editModule
+  "/:moduleCode",
+  validateModuleUpdate, // <— new name
+  catchAsync(editModule)
 );
 
-// 5. Delete a student module (using student ID and moduleCode)
-router.delete(
-  "/students/:studentId/modules/:moduleCode",
-  validateModuleParams,
-  deleteModule
-);
+// delete a module by code
+router.delete("/:moduleCode", catchAsync(deleteModule));
 
 module.exports = router;

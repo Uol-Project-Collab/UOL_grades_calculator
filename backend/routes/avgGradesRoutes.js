@@ -4,11 +4,18 @@ const {
   updateAverageGrade,
   getOrCreateAverage
 } = require("../controllers/avgGradeController");
+const { authenticate } = require("../middlewares/authMiddleware");
+const catchAsync = require('../utils/catchAsync');
 
-// Update avgGrade (called by frontend)
-router.put("/students/:studentId/average", updateAverageGrade);
+// Apply authentication to all average-grade routes
+router.use(authenticate);
 
-// Get avgGrade (with fallback calculation)
-router.get("/students/:studentId/average", getOrCreateAverage);
+// Update current user’s average grade
+// PUT /api/grades/average
+router.put('/average', catchAsync(updateAverageGrade));
+
+// Get current user’s average grade (existing or calculated)
+// GET /api/grades/average
+router.get('/average', catchAsync(getOrCreateAverage));
 
 module.exports = router;
