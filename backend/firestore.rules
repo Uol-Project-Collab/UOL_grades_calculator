@@ -1,12 +1,25 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // User document rules (ADDED)
+    match /users/{userId} {
+      allow create: if 
+        request.auth != null && // User is authenticated
+        request.auth.uid == userId && // Document ID matches UID
+        request.resource.data.keys().hasAll(['email', 'role']) &&
+        request.resource.data.role is string;
+
+      allow read, update, delete: if 
+        request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+    }
+
     // Students can only access their own document
     match /students/{studentId} {
       allow read, write: if request.auth != null && request.auth.uid == studentId;
     }
 
-    // Students can manage their grades subcollection
+    // Grades subcollection rules
     match /students/{studentId}/grades/{gradeId} {
       allow read, write: if request.auth != null && request.auth.uid == studentId;
 
@@ -14,26 +27,35 @@ service cloud.firestore {
       allow create: if request.resource.data.keys().hasAll([
           'moduleCode',
           'moduleInfo',
-          'grade',
-          'isRPL'
+          'grade'
         ]) &&
         request.resource.data.moduleCode is string &&
         request.resource.data.moduleInfo.name is string &&
         request.resource.data.moduleInfo.level is number &&
-        request.resource.data.grade is number &&
-        request.resource.data.grade >= 0 &&
-        request.resource.data.grade <= 100 &&
-        request.resource.data.isRPL is bool;
+        (
+          (request.resource.data.grade is string && 
+           (request.resource.data.grade == "RPL" || 
+            matches(request.resource.data.grade, "^\\d{1,3}(\\.\\d{1,2})?$"))
+          ) ||
+          (request.resource.data.grade is number && 
+           request.resource.data.grade >= 0 && 
+           request.resource.data.grade <= 100)
+        );
 
-      allow update: if request.resource.data.grade is number &&
-        request.resource.data.grade >= 0 &&
-        request.resource.data.grade <= 100;
+      allow update: if (
+        (request.resource.data.grade is string && 
+         (request.resource.data.grade == "RPL" || 
+          matches(request.resource.data.grade, "^\\d{1,3}(\\.\\d{1,2})?$")) ||
+        (request.resource.data.grade is number && 
+         request.resource.data.grade >= 0 && 
+         request.resource.data.grade <= 100)
+      ));
     }
 
-    // Modules are read-only for everyone
+    // Modules remain read-only
     match /modules/{moduleId} {
       allow read: if true;
-      allow write: if false; // Admin-only via Firebase Admin SDK
+      allow write: if false;
     }
   }
 }
