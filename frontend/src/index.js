@@ -1,12 +1,7 @@
 import React from 'react';
-import Login from "./User → Authentication/Login.tsx";
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
-export default function Index() {
-  const root = document.getElementById('root');
-
-  root.render (
-      <React.StrictMode>
-        <Login />
-      </React.StrictMode>
-  );
-}
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App />);
