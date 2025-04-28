@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* 
+  global-style.css
+
+  Description:
+  This global stylesheet defines design tokens and typography styles for the portfolio.
+  It establishes a set of CSS variables for font family, font sizes, and weights for various text types.
+  Additionally, global element styles for blocks, body, and buttons are defined.
+*/
+
+/*--------------------------------------------------------------
+# Design Tokens and CSS Variables
+--------------------------------------------------------------*/
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Global Font */
+  --sds-font-family: 'poppins', sans-serif;
+
+  --sds-typography-title-hero-size: 4.5rem;                      /* Title Hero          4.5rem */
+  --sds-typography-title-hero-font-weight: 800;                
+  --sds-typography-title-page-size: 3rem;                        /* Title Page          3rem */
+  --sds-typography-title-page-font-weight: 700;                
+  --sds-typography-subtitle-size: 2rem;                          /* Subtitle            2rem */
+  --sds-typography-subtitle-font-weight: 400;                  
+  --sds-typography-heading-size: 1.5rem;                         /* Heading             1.5rem */
+  --sds-typography-heading-font-weight: 600;                   
+  --sds-typography-subheading-size: 1.25rem;                     /* Subheading          1.25rem */
+  --sds-typography-subheading-font-weight: 500;                
+  --sds-typography-body-base-size: 1rem;                         /* Body Base           1rem */
+  --sds-typography-body-base-font-weight: 400;                 
+  --sds-typography-body-strong-size: 1rem;                       /* Body Strong         1rem */
+  --sds-typography-body-strong-font-weight: 500;               
+  --sds-typography-body-emphasis-size: 1rem;                     /* Body Emphasis       1rem */
+  --sds-typography-body-emphasis-font-weight: 400;             
+  --sds-typography-body-link-size: 1rem;                         /* Body Link           1rem */
+  --sds-typography-body-link-font-weight: 400;                 
+  --sds-typography-body-small-size: 0.875rem;                    /* Body Small          0.875rem */
+  --sds-typography-body-small-font-weight: 400;                
+  --sds-typography-body-small-strong-size: 0.875rem;             /* Body Small Strong   0.875rem */
+  --sds-typography-body-small-strong-font-weight: 500;         
+  --sds-typography-body-code-size: 1rem;                         /* Body Code           1rem */
+  --sds-typography-body-code-font-weight: 400;  
+}
+
+/*--------------------------------------------------------------
+# Typography Classes
+--------------------------------------------------------------*/
+/* Hero Title */
+.title-hero {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-title-hero-size);
+  font-weight: var(--sds-typography-title-hero-font-weight);
+}
+
+/* Page Title */
+.page-title {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-title-page-size);
+  font-weight: var(--sds-typography-title-page-font-weight);
+}
+
+/* Subtitle */
+.subtitle {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-subtitle-size);
+  font-weight: var(--sds-typography-subtitle-font-weight);
+}
+
+/* General Heading */
+.heading {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-heading-size);
+  font-weight: var(--sds-typography-heading-font-weight);
+}
+
+/* Subheading */
+.subheading {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-subheading-size);
+  font-weight: var(--sds-typography-subheading-font-weight);
+}
+
+/* Body Text Styles */
+.body-base {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-base-size);
+  font-weight: var(--sds-typography-body-base-font-weight);
+}
+
+.body-strong {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-strong-size);
+  font-weight: var(--sds-typography-body-strong-font-weight);
+}
+
+.body-emphasis {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-emphasis-size);
+  font-weight: var(--sds-typography-body-emphasis-font-weight);
+}
+
+.body-link {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-link-size);
+  font-weight: var(--sds-typography-body-link-font-weight);
+}
+
+.body-small {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-small-size);
+  font-weight: var(--sds-typography-body-small-font-weight);
+}
+
+.body-small-strong {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-small-strong-size);
+  font-weight: var(--sds-typography-body-small-strong-font-weight);
+}
+
+.body-code {
+  font-family: var(--sds-font-family);
+  font-size: var(--sds-typography-body-code-size);
+  font-weight: var(--sds-typography-body-code-font-weight);
+}
