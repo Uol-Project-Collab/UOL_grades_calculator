@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@theme {
+  /* Color theme for our application. */
+  --color-primary: #0059FF;
+  --color-primary-dark: #00205B;
+  --color-secondary: #7BC950;
+  --color-accent: #A31621;
+  --color-accent-dark: #D0021B;
+  --color-highlight: #FDECEF;
+  --color-text-dark: #110B11;
+  --color-background: #FCFAFA;
+
+  /* This sets default fonts for the entire application. */
+  --font-sans: Poppins, sans-serif; 
+
+  /* Font Sizes */
+  --text-hero:     4.5rem;
+  --text-page:     3rem;
+  --text-sub:      2rem;
+  --text-head:     1.5rem;
+  --text-subhead:  1.25rem;
+  --text-body:     1rem;
+  --text-small:    0.875rem;
+  --text-code:     1rem;
+}
