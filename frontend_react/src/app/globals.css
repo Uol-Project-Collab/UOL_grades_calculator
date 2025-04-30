@@ -24,3 +24,16 @@
   --text-small: 0.875rem;
   --text-code: 1rem;
 }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.background {
+  background:
+    url("/honeycomb-bg.png") no-repeat center/cover,
+    linear-gradient(63deg, var(--color-primary-dark), var(--color-primary));
+  background-blend-mode: soft-light, normal;
+}
