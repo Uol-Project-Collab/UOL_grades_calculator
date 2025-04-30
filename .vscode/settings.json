@@ -13,6 +13,9 @@
       }
     ]
   },
+  /*
+    This is to add postcss to the tailwindcss language server.
+  */
   "files.associations": {
     "*.css": "tailwindcss"
   }
