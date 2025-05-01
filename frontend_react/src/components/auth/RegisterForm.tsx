@@ -14,12 +14,17 @@ export default function RegisterForm() {
           </div>
         ))}
         <button
-          className="bg-primary-dark text-background mt-4 rounded-lg p-2"
+          className="bg-primary-dark text-background mt-4 flex items-center justify-center rounded-lg p-2"
           type="submit"
         >
           Register
+          <span className="material-symbols-outlined ml-2">person_add</span>
         </button>
       </form>
+
+      <p>
+        Have an account? <b>Login</b>
+      </p>
     </>
   );
 }

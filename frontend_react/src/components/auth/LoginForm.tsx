@@ -16,12 +16,17 @@ export default function LoginForm() {
           placeholder="Enter your password."
         />
         <button
-          className="bg-primary-dark text-background mt-4 rounded-lg p-2"
+          className="bg-primary-dark text-background mt-4 flex items-center justify-center rounded-lg p-2"
           type="submit"
         >
           Login
+          <span className="material-symbols-outlined ml-2">login</span>
         </button>
       </form>
+
+      <p>
+        Don't have an account? <b>Create an Account</b>
+      </p>
     </>
   );
 }
