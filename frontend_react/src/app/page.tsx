@@ -8,6 +8,8 @@ export default function Home() {
   const [isLoginTab, SetLoginTab] = useState(true);
   const buttonGray = "bg-gray-200 w-[50%] p-5 text-gray-500";
   return (
+    <>
+      <h1 className="text-page text-background font-extrabold mt-5 mb-5 ml-48 self-start">UOL Project Collab</h1>
     <div className="bg-background flex w-[80%] flex-row items-start rounded-2xl p-[2rem]">
       <section className="w-[60%]">
         <img src="/college-students.png" />
@@ -41,5 +43,6 @@ export default function Home() {
         {isLoginTab ? <LoginForm /> : <RegisterForm />}
       </section>
     </div>
+    </>
   );
 }
