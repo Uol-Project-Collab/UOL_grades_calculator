@@ -1,6 +1,6 @@
 export default function RegisterForm() {
   return (
-    <div className="flex flex-col items-center h-full justify-around">
+    <div className="flex h-full flex-col items-center justify-around">
       <h1 className="text-page text-text-dark font-bold">Create an account</h1>
       <form className="flex w-[30rem] flex-col">
         {["Email", "Password", "Confirm Password"].map((label, index) => (

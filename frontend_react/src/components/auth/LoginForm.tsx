@@ -1,6 +1,6 @@
 export default function LoginForm() {
   return (
-    <div className="flex flex-col items-center h-full justify-around">
+    <div className="flex h-full flex-col items-center justify-around">
       <h1 className="text-page text-text-dark font-bold">Enter your details</h1>
       <form className="flex w-[30rem] flex-col">
         <div className="mt-1 flex flex-col pt-1 pb-1">
