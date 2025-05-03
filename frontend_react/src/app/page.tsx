@@ -6,23 +6,29 @@ import RegisterForm from "../components/auth/RegisterForm";
 
 export default function Home() {
   const [isLoginTab, SetLoginTab] = useState(true);
-  const buttonGray = "bg-gray-200 w-[50%] p-5 text-gray-500";
+  const buttonGray = "bg-gray-200 hover:bg-gray-100 w-[50%] p-5 text-gray-500 cursor-pointer transition";
   return (
-    <>
-      <h1 className="text-page text-background mt-5 mb-5 ml-48 self-start font-extrabold">
+    <div className="flex flex-col items-center justify-center">
+      <h1 className="text-page text-background w-[90%] md:w-[80%] mb-2 text-left font-extrabold">
         UOL Project Collab
       </h1>
-      <div className="bg-background flex w-[80%] flex-row items-start rounded-2xl p-[2rem]">
-        <section className="w-[60%]">
-          <img src="/college-students.png" />
-          <h1 className="text-hero text-text-dark font-extrabold">Hi there.</h1>
-          <p className="text-sub text-text-dark font-bold">
+      <div className="bg-background mx-auto flex w-[90%] flex-col items-start rounded-2xl p-4 md:w-[80%] md:flex-row md:p-[2rem]">
+        <section className="w-full text-center md:w-[60%] md:text-left">
+          <img
+            src="/college-students.png"
+            className="mx-auto w-[80%] md:mx-0 md:w-auto"
+            alt="College Students"
+          />
+          <h1 className="text-hero text-text-dark mt-4 font-extrabold md:mt-0">
+            Hi there.
+          </h1>
+          <p className="text-sub text-text-dark mt-2 font-bold">
             Want your result before your degree?
             <br />
-            You are at right place.
+            You are at the right place.
           </p>
         </section>
-        <section className="ml-4 h-full w-[40%]">
+        <section className="mt-6 ml-0 h-full w-full md:mt-0 md:ml-4 md:w-[40%]">
           <div className="flex items-center justify-evenly">
             <button
               className={isLoginTab ? "w-[50%] p-5" : buttonGray}
@@ -45,6 +51,6 @@ export default function Home() {
           {isLoginTab ? <LoginForm /> : <RegisterForm />}
         </section>
       </div>
-    </>
+    </div>
   );
 }
