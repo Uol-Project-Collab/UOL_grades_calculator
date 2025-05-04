@@ -49,7 +49,7 @@ export default function Modules() {
             <div className="flex w-fit flex-row">
               <button
                 type="button"
-                className="text-sub mr-6 font-semibold underline"
+                className="text-sub mr-6 font-semibold text-text-dark underline"
               >
                 Level 4
               </button>
@@ -69,7 +69,7 @@ export default function Modules() {
             <div className="w-fit">
               <button
                 type="button"
-                className="flex flex-row items-center"
+                className="flex flex-row items-center rounded-lg p-2 cursor-pointer bg-background-light"
                 onClick={() => router.push("/modules/add-modules")}
               >
                 <span className="material-symbols-outlined mr-2">add</span>Add

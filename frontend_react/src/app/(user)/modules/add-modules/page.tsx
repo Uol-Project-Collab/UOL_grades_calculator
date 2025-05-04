@@ -1,8 +1,11 @@
-export default function AddModules() {
-  return (
-    <>
-      <h1>Select your level!</h1>
-      <h1 className="text-3xl font-bold underline">Add Modules</h1>
-    </>
-  );
+"use client";
+
+import { useRouter } from "next/navigation";
+
+export default function Page() {
+	const router = useRouter();
+
+	router.push("/modules/add-modules/step-1");
+
+	return null;
 }
