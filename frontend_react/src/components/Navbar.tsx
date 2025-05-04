@@ -2,7 +2,7 @@ export default function Navbar() {
   const navLink = "text-body text-background flex item-center font-bold"
   const materialIcon = "material-symbols-outlined mr-2"
   return(
-    <nav className="bg-primary-dark flex flex-col justify-between rounded-2xl p-10 mt-2 w-fit h-full">
+    <nav className="bg-primary-dark flex flex-col justify-between rounded-2xl p-10 mt-2 w-fit">
       <ul className="mt-10 flex flex-col items-start gap-4">
         <li className={navLink}>
           <span className={materialIcon}>
