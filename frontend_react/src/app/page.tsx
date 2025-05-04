@@ -43,10 +43,11 @@ import RegisterForm from "../components/auth/RegisterForm";
  */
 export default function Home() {
   const [isLoginTab, SetLoginTab] = useState(true);
-  const buttonGray = "bg-gray-200 hover:bg-gray-100 w-[50%] p-5 text-gray-500 cursor-pointer transition";
+  const buttonGray =
+    "bg-gray-200 hover:bg-gray-100 w-[50%] p-5 text-gray-500 cursor-pointer transition";
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="text-page text-background w-[90%] md:w-[80%] mb-2 text-left font-extrabold">
+      <h1 className="text-page text-background mb-2 w-[90%] text-left font-extrabold md:w-[80%]">
         UOL Project Collab
       </h1>
       <div className="bg-background mx-auto flex w-[90%] flex-col items-start rounded-2xl p-4 md:w-[80%] md:flex-row md:p-[2rem]">

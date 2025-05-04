@@ -43,13 +43,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
         {/* Icons Connection - https://fonts.google.com/icons
-          * Docs: https://developers.google.com/fonts/docs/material_symbols
-          * Material Symbols Outlined is a collection of 1,100+ icons that are
-          * designed to be used in web and mobile applications.
-          * Only required icons should be imported to reduce the bundle size.
-          * Icons should be imported using the icon_names parameter in the URL.
-          * in alphabetical order.
-          */}
+         * Docs: https://developers.google.com/fonts/docs/material_symbols
+         * Material Symbols Outlined is a collection of 1,100+ icons that are
+         * designed to be used in web and mobile applications.
+         * Only required icons should be imported to reduce the bundle size.
+         * Icons should be imported using the icon_names parameter in the URL.
+         * in alphabetical order.
+         */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=desktop_windows,import_contacts,login,logout,monitoring,person_add&display=block"
           rel="stylesheet"

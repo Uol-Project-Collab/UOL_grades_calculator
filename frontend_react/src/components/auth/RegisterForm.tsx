@@ -2,29 +2,29 @@ import { useRouter } from "next/navigation";
 
 /**
  * A React functional component that renders a registration form.
- * 
+ *
  * @component
  * @returns {JSX.Element} The rendered registration form component.
- * 
+ *
  * @description
- * This component provides a user interface for creating a new account. 
- * It includes input fields for email, password, and password confirmation, 
+ * This component provides a user interface for creating a new account.
+ * It includes input fields for email, password, and password confirmation,
  * as well as a submit button that redirects the user to the dashboard upon successful registration.
- * 
+ *
  * @remarks
  * - The form uses Tailwind CSS classes for styling.
  * - The `useRouter` hook from Next.js is used for navigation.
  * - The password fields are masked for security.
- * 
+ *
  * @example
  * ```tsx
  * import RegisterForm from './RegisterForm';
- * 
+ *
  * function App() {
  *   return <RegisterForm />;
  * }
  * ```
- * 
+ *
  * @todo
  * - Replace the placeholder `onClick` handler with the actual registration logic.
  * - Add form validation for better user experience.
@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
  */
 export default function RegisterForm() {
   const router = useRouter();
-  
+
   return (
     <div className="flex h-[95%] flex-col items-center justify-around p-4 sm:p-6">
       <h1 className="text-sub text-text-dark text-center font-bold sm:text-left">
@@ -54,7 +54,7 @@ export default function RegisterForm() {
           type="submit"
           onClick={
             // will be replaced with the login function
-              (event) => {
+            (event) => {
               event.preventDefault();
               router.push("/dashboard");
             }

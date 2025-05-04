@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
  * LoginForm Component
  *
  * This component renders a login form with fields for email and password,
- * along with a submit button. It also includes a link to navigate to the 
+ * along with a submit button. It also includes a link to navigate to the
  * account creation page for users who do not have an account.
  *
  * @component
@@ -67,7 +67,7 @@ export default function LoginForm() {
           type="submit"
           onClick={
             // will be replaced with the login function
-              (event) => {
+            (event) => {
               event.preventDefault();
               router.push("/dashboard");
             }
