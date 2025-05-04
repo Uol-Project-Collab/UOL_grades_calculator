@@ -21,6 +21,26 @@ export default function Dashboard() {
           <p className="text-body text-background mt-2 font-regular">Support</p>
         </div>
       </header>
+      <nav>
+        <ul className="flex flex-col items-start justify-center gap-4 mt-10">
+          <li className="text-body text-text-dark font-bold">
+            <span className="material-symbols-outlined mr-2">desktop_windows</span>
+            Dashboard
+          </li>
+          <li className="text-body text-text-dark font-bold">
+            <span className="material-symbols-outlined mr-2">import_contacts</span>
+            Modules
+          </li>
+          <li className="text-body text-text-dark font-bold">
+            <span className="material-symbols-outlined mr-2">monitoring</span>
+            Results
+          </li>
+          <li className="text-body text-text-dark font-bold">
+            <span className="material-symbols-outlined mr-2">logout</span>
+            Logout
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }

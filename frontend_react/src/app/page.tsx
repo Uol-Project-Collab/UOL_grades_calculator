@@ -4,6 +4,43 @@ import { useState } from "react";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
 
+/**
+ * The `Home` component serves as the main page for the application.
+ * It provides a user interface for toggling between login and registration forms.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Home component.
+ *
+ * @remarks
+ * - The component uses Tailwind CSS for styling.
+ * - It includes a toggle mechanism to switch between "Login" and "Register" tabs.
+ * - The `isLoginTab` state determines which form is displayed.
+ *
+ * @example
+ * ```tsx
+ * import Home from './page';
+ *
+ * function App() {
+ *   return <Home />;
+ * }
+ * ```
+ *
+ * @description
+ * The component is structured into two main sections:
+ * 1. A welcome section with an image and introductory text.
+ * 2. A form section with buttons to toggle between login and registration forms.
+ *
+ * @state
+ * - `isLoginTab` (`boolean`): Tracks whether the "Login" tab is active.
+ *
+ * @styles
+ * - `buttonGray`: A shared class for styling inactive buttons.
+ * - Various Tailwind CSS classes are used for layout and design.
+ *
+ * @dependencies
+ * - `LoginForm`: Component rendered when the "Login" tab is active.
+ * - `RegisterForm`: Component rendered when the "Register" tab is active.
+ */
 export default function Home() {
   const [isLoginTab, SetLoginTab] = useState(true);
   const buttonGray = "bg-gray-200 hover:bg-gray-100 w-[50%] p-5 text-gray-500 cursor-pointer transition";

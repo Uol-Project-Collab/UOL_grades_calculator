@@ -1,5 +1,42 @@
 import { useRouter } from "next/navigation";
 
+/**
+ * LoginForm Component
+ *
+ * This component renders a login form with fields for email and password,
+ * along with a submit button. It also includes a link to navigate to the 
+ * account creation page for users who do not have an account.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The rendered login form component.
+ *
+ * @remarks
+ * - The form uses Tailwind CSS classes for styling.
+ * - The `router.push` function is used to navigate to the dashboard upon successful login.
+ * - The `onClick` handler for the submit button prevents the default form submission behavior.
+ *
+ * @example
+ * ```tsx
+ * import LoginForm from './LoginForm';
+ *
+ * function App() {
+ *   return (
+ *     <div>
+ *       <LoginForm />
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @dependencies
+ * - `useRouter` from `next/router` for navigation.
+ *
+ * @todo
+ * - Replace the placeholder `onClick` handler with the actual login function.
+ * - Add form validation for email and password fields.
+ * - Implement error handling for login failures.
+ */
 export default function LoginForm() {
   const router = useRouter();
 
@@ -32,7 +69,7 @@ export default function LoginForm() {
             // will be replaced with the login function
               (event) => {
               event.preventDefault();
-              router.push("/user/dashboard");
+              router.push("/dashboard");
             }
           }
         >
