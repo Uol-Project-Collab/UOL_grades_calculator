@@ -1,3 +1,20 @@
+/*
+Importing TailwindCSS base styles to enable utility-first CSS framework functionality.
+
+Theme Section:
+Defining custom CSS variables for the application's color palette, typography, and font sizes.
+These variables ensure consistent styling across the application and allow for easy theme adjustments.
+- Colors: Primary, secondary, accent, highlight, text, and background colors.
+- Fonts: Default sans-serif font for the application.
+- Font Sizes: Predefined sizes for various text elements like hero, page titles, subtitles, headings, etc.
+
+Global Styles:
+- Setting the height and margin for the `html` and `body` elements to ensure proper layout and spacing.
+- Defining a `.background` class with a layered background:
+  - A honeycomb image centered and covering the entire area.
+  - A linear gradient blending primary and primary-dark colors at a 63-degree angle.
+  - Using `background-blend-mode` to softly overlay the gradient on the image.
+*/
 @import "tailwindcss";
 
 @theme {

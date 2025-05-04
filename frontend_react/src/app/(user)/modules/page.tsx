@@ -5,6 +5,34 @@ import Navbar from "../../../components/Navbar";
 import { useRouter } from "next/navigation";
 import Card from "../../../components/Card";
 
+/**
+ * The `Modules` component represents a page that displays the user's current modules
+ * categorized by levels (Level 4, Level 5, Level 6). It provides navigation between
+ * different module levels and an option to add new modules.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} A React functional component that renders the modules page.
+ *
+ * @remarks
+ * - The component uses `useRouter` from Next.js for navigation.
+ * - It includes a `Header` component to display the page title and a message.
+ * - A `Navbar` component is included for navigation within the application.
+ * - The page contains buttons to switch between module levels, with the active level
+ *   styled differently.
+ * - A button is provided to navigate to the "Add Module" page.
+ * - The modules are displayed as a collection of `Card` components, each representing
+ *   a module with its name, code, and grade.
+ *
+ * @example
+ * ```tsx
+ * <Modules />
+ * ```
+ *
+ * @dependencies
+ * - `useRouter` from Next.js for navigation.
+ * - `Header`, `Navbar`, and `Card` components for layout and functionality.
+ */
 export default function Modules() {
   const router = useRouter();
   return (

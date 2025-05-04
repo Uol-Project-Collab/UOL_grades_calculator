@@ -1,6 +1,41 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 
+/**
+ * Navbar component that provides navigation links for the application.
+ * 
+ * This component renders a vertical navigation bar with links to different
+ * sections of the application, including "Dashboard", "Modules", "Result", 
+ * and "Logout". It uses dynamic styling to highlight the active link based 
+ * on the current pathname.
+ * 
+ * @returns {JSX.Element} The rendered Navbar component.
+ * 
+ * ## Classes:
+ * - `navLink`: A shared class for styling navigation links.
+ * - `materialIcon`: A shared class for styling Material Icons.
+ * 
+ * ## Dependencies:
+ * - `useRouter`: A hook for programmatic navigation.
+ * - `usePathname`: A hook to retrieve the current pathname for active link highlighting.
+ * 
+ * ## Functions:
+ * - `handleNavigation(path: string)`: Navigates to the specified path using the router.
+ * 
+ * ## Structure:
+ * - The navigation bar is divided into two sections:
+ *   1. Main navigation links (Dashboard, Modules, Result).
+ *   2. Logout link.
+ * 
+ * ## Notes:
+ * - The `font-bold` class is conditionally applied to the active link for visual emphasis.
+ * - The `material-symbols-outlined` class is used for Material Icons next to each link.
+ * 
+ * * @example
+ * ```tsx
+ * <Navbar />
+ * ```
+ */
 export default function Navbar() {
   const navLink =
     "text-body text-background flex item-center font-regular cursor-pointer";
