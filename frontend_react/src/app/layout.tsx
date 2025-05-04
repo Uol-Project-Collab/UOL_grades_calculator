@@ -51,7 +51,7 @@ export default function RootLayout({
          * in alphabetical order.
          */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=desktop_windows,import_contacts,login,logout,monitoring,person_add&display=block"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=add,desktop_windows,import_contacts,login,logout,monitoring,person_add"
           rel="stylesheet"
         />
         <link rel="shortcut icon" href="/favicon.ico" sizes="any" />

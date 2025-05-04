@@ -1,11 +1,27 @@
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 
-export default function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+/**
+ * Layout component that serves as the main structure for the user-facing pages.
+ *
+ * @param {Object} props - The props object.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ *
+ * @returns {JSX.Element} The layout structure containing a header, navigation bar, and content area.
+ *
+ * @remarks
+ * - The layout includes a responsive design with specific width and padding adjustments for different screen sizes.
+ * - The header displays a title and a welcoming message for the user.
+ * - The `Navbar` component is used for navigation, and the `children` prop is rendered as the main content.
+ *
+ * @example
+ * ```tsx
+ * <Layout>
+ *   <div>Your content here</div>
+ * </Layout>
+ * ```
+ */
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-background mx-auto flex h-full w-[90%] flex-col p-1 md:w-[80%] md:p-2">
       <div className="w-full pt-10 text-right">
@@ -19,11 +35,9 @@ export default function Layout({
         message="Always stay updated in your student grades."
       />
 
-      <div className="flex flex-row h-full w-full">
+      <div className="flex h-full w-full flex-row">
         <Navbar />
-        <div>
-          {children}
-        </div>
+        <div className="w-full">{children}</div>
       </div>
     </div>
   );

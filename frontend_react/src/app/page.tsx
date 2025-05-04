@@ -69,6 +69,7 @@ export default function Home() {
         <section className="mt-6 ml-0 h-full w-full md:mt-0 md:ml-4 md:w-[40%]">
           <div className="flex items-center justify-evenly">
             <button
+              type="button"
               className={isLoginTab ? "w-[50%] p-5" : buttonGray}
               onClick={() => {
                 SetLoginTab(true);
@@ -77,6 +78,7 @@ export default function Home() {
               Login
             </button>
             <button
+              type="button"
               className={isLoginTab ? buttonGray : "w-[50%] p-5"}
               onClick={() => {
                 SetLoginTab(false);

@@ -10,9 +10,7 @@ export default function Header({ title, message }: HeaderProps) {
         <h1 className="text-page text-background mt-4 font-bold md:mt-0">
           {title}
         </h1>
-        <p className="text-body text-background font-regular mt-2">
-          {message}
-        </p>
+        <p className="text-body text-background font-regular mt-2">{message}</p>
       </div>
       <div className="flex flex-row self-end">
         <p className="text-body text-background font-regular mt-2 mr-5">
