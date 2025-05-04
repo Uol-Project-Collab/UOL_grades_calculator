@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           UOL Project Collab
         </h1>
       </div>
-      
+
       {children}
     </div>
   );

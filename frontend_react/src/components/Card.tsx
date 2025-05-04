@@ -4,19 +4,19 @@ interface CardProps {
   grade: number;
 }
 
-export default function Card({moduleName, moduleCode, grade} : CardProps){
-  return(
-    <div className="flex w-80 flex-row bg-gray-100 p-3 mr-4 mt-4  rounded-2xl shadow">
+export default function Card({ moduleName, moduleCode, grade }: CardProps) {
+  return (
+    <div className="mt-4 mr-4 flex w-80 flex-row rounded-2xl bg-gray-100 p-3 shadow">
       <div>
         <p>{moduleName}</p>
         <p>{moduleCode}</p>
-        <button type="button" className="flex flex-row items-center mt-8">
+        <button type="button" className="mt-8 flex flex-row items-center">
           <span className="material-symbols-outlined mr-2">edit_square</span>
           Edit Grade
         </button>
       </div>
       <div className="flex items-center">
-        <svg viewBox="0 0 32 32" className="w-16 h-16">
+        <svg viewBox="0 0 32 32" className="h-16 w-16">
           <circle
             cx="16"
             cy="16"
@@ -39,5 +39,5 @@ export default function Card({moduleName, moduleCode, grade} : CardProps){
         <p className="ml-4 text-sm">{grade}% Grade</p>
       </div>
     </div>
-    );
+  );
 }

@@ -3,10 +3,7 @@ import Navbar from "../../../components/Navbar";
 export default function Result() {
   return (
     <>
-      <Header
-        title="Your Current Result"
-        message="Your are doing great."
-      />
+      <Header title="Your Current Result" message="Your are doing great." />
 
       <div className="flex h-full w-full flex-row">
         <Navbar />

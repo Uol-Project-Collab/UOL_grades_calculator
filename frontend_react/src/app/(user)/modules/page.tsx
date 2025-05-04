@@ -39,35 +39,40 @@ export default function Modules() {
               </button>
             </div>
             <div className="w-fit">
-              <button type="button" className="flex flex-row items-center" onClick={() => router.push("/modules/add-modules")}>
-                <span className="material-symbols-outlined mr-2">add</span>Add Module
+              <button
+                type="button"
+                className="flex flex-row items-center"
+                onClick={() => router.push("/modules/add-modules")}
+              >
+                <span className="material-symbols-outlined mr-2">add</span>Add
+                Module
               </button>
             </div>
           </div>
-          <div className="flex flex-row flex-wrap pl-6 w-full">
-            <Card 
+          <div className="flex w-full flex-row flex-wrap pl-6">
+            <Card
               moduleName="Introduction to Programming"
               moduleCode="CM-1010"
               grade={80}
             />
-            <Card 
+            <Card
               moduleName="Introduction to Programming"
               moduleCode="CM-1010"
               grade={80}
             />
-            <Card 
+            <Card
               moduleName="Introduction to Programming"
               moduleCode="CM-1010"
               grade={80}
             />
-            <Card 
+            <Card
               moduleName="Introduction to Programming"
               moduleCode="CM-1010"
               grade={80}
             />
           </div>
         </div>
-      </div> 
+      </div>
     </>
   );
 }

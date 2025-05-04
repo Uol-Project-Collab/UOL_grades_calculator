@@ -2,7 +2,8 @@
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const navLink = "text-body text-background flex item-center font-regular cursor-pointer";
+  const navLink =
+    "text-body text-background flex item-center font-regular cursor-pointer";
   const materialIcon = "material-symbols-outlined mr-2";
   const router = useRouter();
   const pathname = usePathname();
