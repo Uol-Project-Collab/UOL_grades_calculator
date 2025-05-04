@@ -1,8 +1,3 @@
-"use client";
-
-import Header from "../../components/Header";
-import Navbar from "../../components/Navbar";
-
 /**
  * Layout component that serves as the main structure for the user-facing pages.
  *
@@ -31,16 +26,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           UOL Project Collab
         </h1>
       </div>
-
-      <Header
-        title="Welcome, User"
-        message="Always stay updated in your student grades."
-      />
-
-      <div className="flex h-full w-full flex-row">
-        <Navbar />
-        <div className="w-full">{children}</div>
-      </div>
+      
+      {children}
     </div>
   );
 }
