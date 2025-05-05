@@ -1,27 +1,39 @@
-'use client';
+"use client";
 
-import { useAddModule } from "../(context)/AddModuleContext";
+import { useState } from "react";
+import HeaderMessage from "./HeaderMessage";
 
 export default function Step1() {
-  const { selectedLevels, setSelectedLevels, setCurrentStep } = useAddModule();
+  const [selectedLevels, setSelectedLevels] = useState<number[]>([]);
 
   const handleCheckboxChange = (value: number) => {
-    if (selectedLevels.includes(value)) {
-      setSelectedLevels(selectedLevels.filter((v) => v !== value));
-    } else {
-      setSelectedLevels([...selectedLevels, value]);
-    }
+    setSelectedLevels((prev) =>
+      prev.includes(value) ? prev.filter((level) => level !== value) : [...prev, value]
+    );
   };
 
+  const [error, setError] = useState<string>();
+
   const handleNextClick = () => {
-    if (selectedLevels.length === 0) return alert("Select at least one level.");
-    setCurrentStep(2);
+    if (selectedLevels.length === 0) {
+      setError("Please select at least one level before proceeding.");
+      return;
+    }
+    setError(null); // Clear any previous error
   };
 
   return (
     <>
+      <HeaderMessage
+        message = "Select Your Module"
+      />
+
       <p className="text-center">
         Please select level for modules you want to add. (If you are not sure then select each level to see all of the modules)
+      </p>
+
+      <p className="text-red-500 text-body text-center">
+        {error}
       </p>
       
       <div className="flex flex-col m-10 p-10 h-90">

@@ -3,7 +3,7 @@
 import Header from "../../../components/Header";
 import Navbar from "../../../components/Navbar";
 import { useRouter } from "next/navigation";
-import Card from "../../../components/Card";
+import Card from "./components/Card";
 
 /**
  * The `Modules` component represents a page that displays the user's current modules
