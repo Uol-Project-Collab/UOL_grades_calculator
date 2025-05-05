@@ -1,11 +1,7 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
+import { AddModuleProvider } from "./(context)/AddModuleContext";
 
-export default function Page() {
-	const router = useRouter();
-
-	router.push("/modules/add-modules/step-1");
-
-	return null;
+export default function Page({ children }: { children: React.ReactNode }) {
+  return <AddModuleProvider>{children}</AddModuleProvider>;
 }
