@@ -1,9 +1,12 @@
 require('dotenv').config();
-const { db } = require('./config/firebase'); // Import Admin Firestore instance
 const express = require('express');
 const cors = require('cors');
+const { authenticate } = require('./middlewares/authMiddleware');
+const errorHandler = require('./middlewares/errorHandler');
+
+const authRoutes = require('./routes/authRoutes');
 const moduleRoutes = require('./routes/moduleRoutes');
-const gradesRoutes = require("./routes/avgGradesRoutes");
+const gradesRoutes = require('./routes/avgGradesRoutes');
 
 const app = express();
 
@@ -12,14 +15,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use('/api', moduleRoutes);
-app.use("/api", gradesRoutes);
+// Public auth routes
+app.use('/api/auth', authRoutes);
 
+// Protected routes
+app.use('/api/modules', authenticate, moduleRoutes);
+app.use('/api/grades', authenticate, gradesRoutes);
 
 app.get('/api/test-firebase', async (req, res) => {
   try {
-    // Use Admin SDK syntax (no need for collection/doc imports)
     const docRef = db.collection('test').doc('connection');
     await docRef.set({ timestamp: new Date() });
     const docSnap = await docRef.get();
@@ -30,6 +34,8 @@ app.get('/api/test-firebase', async (req, res) => {
   }
 });
 
+// Global error handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

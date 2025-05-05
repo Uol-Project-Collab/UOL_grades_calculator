@@ -1,40 +1,17 @@
-const errorHandler = (err, req, res, next) => {
-    console.error(`[${new Date().toISOString()}] Error:`, err.stack);
-    
-    // Handle Joi validation errors
-    if (err.details && err.details[0].type === 'any.required') {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation Error',
-        message: err.details[0].message
-      });
-    }
-  
-    // Handle specific error types
-    switch (err.name) {
-      case 'ValidationError':
-        return res.status(400).json({
-          success: false,
-          error: 'Validation Error',
-          message: err.message
-        });
-        
-      case 'UnauthorizedError':
-        return res.status(401).json({
-          success: false,
-          error: 'Authentication Failed',
-          message: err.message
-        });
-  
-      default:
-        return res.status(err.statusCode || 500).json({
-          success: false,
-          error: 'Server Error',
-          message: process.env.NODE_ENV === 'production' 
-            ? 'Something went wrong' 
-            : err.message
-        });
-    }
-  };
-  
-  module.exports = errorHandler;
+/**
+ * Global Express error handler.
+ * Catches all errors forwarded via next(err) or thrown in async controllers.
+ */
+module.exports = (err, req, res, next) => {
+  if (process.env.NODE_ENV === 'development') console.error('Error stack:', err.stack);
+
+  // Joi validation error
+  if (err.isJoi) {
+    const details = err.details.map(d => d.message);
+    return res.status(400).json({ success: false, error: 'Validation error', details });
+  }
+
+  const status = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(status).json({ success: false, error: message });
+};
