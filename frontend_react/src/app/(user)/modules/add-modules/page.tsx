@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useAddModule } from "./context/AddModuleContext";
 import ProgressBar from "./components/ProgressBar";
 import Step1 from "./components/Step1";
@@ -11,8 +10,6 @@ import Step3 from "./components/Step3";
 export default function Page() {
   const router = useRouter();
   const { currentStep } = useAddModule();
-
-  useEffect(() => {}, [currentStep]);
 
   const renderSteps = () => {
     if (currentStep === 1) {
