@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import HeaderMessage from "./HeaderMessage";
+import AddModulesHeader from "./AddModulesHeader";
+import { useAddModule } from "../context/AddModuleContext";
 
 export default function Step1() {
-  const [selectedLevels, setSelectedLevels] = useState<number[]>([]);
+  const { selectedLevels, setSelectedLevels, setCurrentStep } = useAddModule();
+  const [error, setError] = useState<string>();
 
   const handleCheckboxChange = (value: number) => {
-    setSelectedLevels((prev) =>
-      prev.includes(value) ? prev.filter((level) => level !== value) : [...prev, value]
-    );
+    if (selectedLevels.includes(value)) {
+      setSelectedLevels(selectedLevels.filter((v) => v !== value));
+    } else {
+      setSelectedLevels([...selectedLevels, value]);
+    }
   };
-
-  const [error, setError] = useState<string>();
 
   const handleNextClick = () => {
     if (selectedLevels.length === 0) {
@@ -20,11 +22,12 @@ export default function Step1() {
       return;
     }
     setError(null); // Clear any previous error
+    setCurrentStep(2);
   };
 
   return (
     <>
-      <HeaderMessage
+      <AddModulesHeader
         message = "Select Your Module"
       />
 
