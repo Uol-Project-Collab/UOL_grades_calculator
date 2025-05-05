@@ -10,11 +10,11 @@ export default function ProgressBar() {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center m-10">
+    <div className="m-10 flex flex-row items-center justify-center">
       {[1, 2, 3].map((step, idx) => (
         <div className="flex items-center" key={step}>
-          <div className={`w-8 h-8 rounded-full ${getCircleClass(step)}`}></div>
-          {step !== 3 && <div className="w-16 h-1 bg-primary-dark mx-2"></div>}
+          <div className={`h-8 w-8 rounded-full ${getCircleClass(step)}`}></div>
+          {step !== 3 && <div className="bg-primary-dark mx-2 h-1 w-16"></div>}
         </div>
       ))}
     </div>

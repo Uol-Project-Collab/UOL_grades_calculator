@@ -27,19 +27,16 @@ export default function Step1() {
 
   return (
     <>
-      <AddModulesHeader
-        message = "Select Your Module"
-      />
+      <AddModulesHeader message="Select Your Module" />
 
       <p className="text-center">
-        Please select level for modules you want to add. (If you are not sure then select each level to see all of the modules)
+        Please select level for modules you want to add. (If you are not sure
+        then select each level to see all of the modules)
       </p>
 
-      <p className="text-red-500 text-body text-center">
-        {error}
-      </p>
-      
-      <div className="flex flex-col m-10 p-10 h-90">
+      <p className="text-body text-center text-red-500">{error}</p>
+
+      <div className="m-10 flex h-90 flex-col p-10">
         <label>
           <input
             type="checkbox"
@@ -69,14 +66,16 @@ export default function Step1() {
         </label>
       </div>
 
-      <div className="flex flex-row items-center justify-end mr-2">
+      <div className="mr-2 flex flex-row items-center justify-end">
         <button
           type="button"
-          className="flex flex-row items-center justify-center text-body font-regular text-background bg-primary-dark p-2 w-75 rounded-lg cursor-pointer"
+          className="text-body font-regular text-background bg-primary-dark flex w-75 cursor-pointer flex-row items-center justify-center rounded-lg p-2"
           onClick={handleNextClick}
         >
           Next
-          <span className="material-symbols-outlined ml-2">arrow_right_alt</span>
+          <span className="material-symbols-outlined ml-2">
+            arrow_right_alt
+          </span>
         </button>
       </div>
     </>

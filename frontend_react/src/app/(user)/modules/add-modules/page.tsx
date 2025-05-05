@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -12,40 +12,41 @@ export default function Page() {
   const router = useRouter();
   const { currentStep } = useAddModule();
 
-  useEffect(() => {
-  }, [currentStep]);
+  useEffect(() => {}, [currentStep]);
 
   const renderSteps = () => {
-    if (currentStep === 1){
-      return <Step1 />
-    } else if (currentStep === 2){
-      return <Step2 />
-    } else if (currentStep === 3){
-      return <Step3 />
+    if (currentStep === 1) {
+      return <Step1 />;
+    } else if (currentStep === 2) {
+      return <Step2 />;
+    } else if (currentStep === 3) {
+      return <Step3 />;
     }
-  }
+  };
 
-  return(
+  return (
     <>
       <div>
         <button
           type="button"
-          className="flex flex-row item-center text-head font-semibold text-text-dark cursor-pointer"
+          className="item-center text-head text-text-dark flex cursor-pointer flex-row font-semibold"
           onClick={() => {
             router.push("/dashboard");
           }}
         >
-          <span className="material-symbols-outlined mr-2" style={{ fontSize: '36px' }}>cancel</span>
+          <span
+            className="material-symbols-outlined mr-2"
+            style={{ fontSize: "36px" }}
+          >
+            cancel
+          </span>
           Exit
         </button>
       </div>
 
       <ProgressBar />
-      
-      <div>
-        {renderSteps()}
-      </div>
+
+      <div>{renderSteps()}</div>
     </>
   );
-  
 }

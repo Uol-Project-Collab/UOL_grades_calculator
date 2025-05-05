@@ -2,9 +2,9 @@ interface HeaderProps {
   message: string;
 }
 
-export default function AddModulesHeader({message} : HeaderProps){
-  return(
-    <div className="flex items-center justify-center w-full p-5 mt-4 mb-4 bg-primary-dark text-background text-sub font-bold">
+export default function AddModulesHeader({ message }: HeaderProps) {
+  return (
+    <div className="bg-primary-dark text-background text-sub mt-4 mb-4 flex w-full items-center justify-center p-5 font-bold">
       {message}
     </div>
   );
