@@ -1,4 +1,8 @@
+'use client';
+
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 
 /**
  * LoginForm Component
@@ -40,18 +44,73 @@ import { useRouter } from "next/navigation";
 export default function LoginForm() {
   const router = useRouter();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    setError(null);
+
+    if (email === "") {
+      setError("Please enter login details.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // if (password.trim().length < 6) {
+    //   setError("Password must be at least 6 characters.");
+    //   return;
+    // }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const { message } = await response.json();
+        throw new Error(message || "Login failed. Check your credentials.");
+      }
+
+      // If success, navigate to dashboard
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex h-[95%] flex-col items-center justify-around p-4 sm:p-6">
       <h1 className="text-sub text-text-dark text-center font-bold sm:text-left">
         Enter your details
       </h1>
-      <form className="flex w-full max-w-[30rem] flex-col">
+      <form className="flex w-full max-w-[30rem] flex-col" onSubmit={handleLogin}>
         <div className="mt-1 flex flex-col pt-1 pb-1">
           <label className="text-sm sm:text-base">Email</label>
           <input
             className="focus:ring-primary-dark rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
             type="text"
             placeholder="Enter your email."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="mt-1 flex flex-col pt-2 pb-2">
@@ -60,20 +119,21 @@ export default function LoginForm() {
             className="focus:ring-primary-dark rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
             type="password"
             placeholder="Enter your password."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
+        {error && (
+          <p className="text-red-600 text-sm mt-2">{error}</p>
+        )}
+
         <button
-          className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition"
+          className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition disabled:opacity-50"
           type="submit"
-          onClick={
-            // will be replaced with the login function
-            (event) => {
-              event.preventDefault();
-              router.push("/dashboard");
-            }
-          }
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
           <span className="material-symbols-outlined ml-2">login</span>
         </button>
       </form>

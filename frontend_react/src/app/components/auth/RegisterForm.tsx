@@ -1,4 +1,7 @@
+'use client';
+
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 /**
  * A React functional component that renders a registration form.
@@ -30,44 +33,121 @@ import { useRouter } from "next/navigation";
  * - Add form validation for better user experience.
  * - Implement error handling for failed registration attempts.
  */
-export default function RegisterForm() {
+export default function RegistrationForm() {
   const router = useRouter();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError(null);
+
+    if (!email || !password || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const { message } = await response.json();
+        throw new Error(message || "Registration failed.");
+      }
+
+      router.push('/dashboard'); // or '/login' if you prefer manual login
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-[95%] flex-col items-center justify-around p-4 sm:p-6">
       <h1 className="text-sub text-text-dark text-center font-bold sm:text-left">
-        Create an account
+        Create your account
       </h1>
-      <form className="flex w-full max-w-[30rem] flex-col">
-        {["Email", "Password", "Confirm Password"].map((label, index) => (
-          <div key={index} className="mt-1 flex flex-col pt-1 pb-1">
-            <label className="text-sm sm:text-base">{label}</label>
-            <input
-              className="focus:ring-primary-dark mt-1 rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
-              type={label.includes("Password") ? "password" : "text"}
-              placeholder={`Enter your ${label.toLowerCase()}.`}
-            />
-          </div>
-        ))}
+      <form className="flex w-full max-w-[30rem] flex-col" onSubmit={handleRegister}>
+        <div className="mt-1 flex flex-col pt-1 pb-1">
+          <label className="text-sm sm:text-base">Email</label>
+          <input
+            className="focus:ring-primary-dark rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
+            type="text"
+            placeholder="Enter your email."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-1 flex flex-col pt-2 pb-2">
+          <label className="text-sm sm:text-base">Password</label>
+          <input
+            className="focus:ring-primary-dark rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
+            type="password"
+            placeholder="Create a password."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-1 flex flex-col pt-2 pb-2">
+          <label className="text-sm sm:text-base">Confirm Password</label>
+          <input
+            className="focus:ring-primary-dark rounded-lg border border-gray-300 p-2 outline-1 focus:ring-2"
+            type="password"
+            placeholder="Re-enter your password."
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+
+        {error && (
+          <p className="text-red-600 text-sm mt-2">{error}</p>
+        )}
+
         <button
-          className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition"
+          className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition disabled:opacity-50"
           type="submit"
-          onClick={
-            // will be replaced with the login function
-            (event) => {
-              event.preventDefault();
-              router.push("/dashboard");
-            }
-          }
+          disabled={loading}
         >
-          Register
+          {loading ? "Creating account..." : "Register"}
           <span className="material-symbols-outlined ml-2">person_add</span>
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm sm:text-base">
-        Have an account?{" "}
-        <b className="text-primary-dark cursor-pointer">Login</b>
+      <p className="mt-4 cursor-pointer text-center text-sm sm:text-base">
+        Already have an account? <b>Login</b>
       </p>
     </div>
   );
