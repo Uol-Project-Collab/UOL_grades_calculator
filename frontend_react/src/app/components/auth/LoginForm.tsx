@@ -83,16 +83,16 @@ export default function LoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+    
       if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message || "Login failed. Check your credentials.");
+        throw new Error(data.error);
       }
 
       // If success, navigate to dashboard
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message);
-      console.log(err);
+    } catch (error: any) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
