@@ -11,15 +11,15 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "firebase": "^11.6.0",
-    "firebase-admin": "^13.3.0",
-    "joi": "^17.13.3"
+    "cors": "2.8.5",
+    "dotenv": "16.5.0",
+    "express": "5.1.0",
+    "firebase": "11.6.0",
+    "firebase-admin": "13.3.0",
+    "joi": "17.13.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9",
-    "supertest": "^7.1.0"
+    "nodemon": "3.1.9",
+    "supertest": "7.1.0"
   }
 }
