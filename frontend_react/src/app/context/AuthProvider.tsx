@@ -1,6 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, Dispatch, SetStateAction } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 type AuthContextType = {
   email: string;
@@ -13,12 +19,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
 
   return (

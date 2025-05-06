@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,9 +36,9 @@ import { useState } from "react";
 export default function RegistrationForm() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -74,21 +74,21 @@ export default function RegistrationForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-    
+
       const data = await response.json();
-    
+
       if (!response.ok) {
         throw new Error(data.error);
       }
-    
-      router.push('/dashboard');
+
+      router.push("/dashboard");
     } catch (error: any) {
-      if (error.message === 'auth/email-already-in-use') {
+      if (error.message === "auth/email-already-in-use") {
         setError("The email is already in use.");
       } else {
         setError(error.message);
@@ -96,14 +96,17 @@ export default function RegistrationForm() {
     } finally {
       setLoading(false);
     }
-  }   
+  };
 
   return (
     <div className="flex h-[95%] flex-col items-center justify-around p-4 sm:p-6">
       <h1 className="text-sub text-text-dark text-center font-bold sm:text-left">
         Create your account
       </h1>
-      <form className="flex w-full max-w-[30rem] flex-col" onSubmit={handleRegister}>
+      <form
+        className="flex w-full max-w-[30rem] flex-col"
+        onSubmit={handleRegister}
+      >
         <div className="mt-1 flex flex-col pt-1 pb-1">
           <label className="text-sm sm:text-base">Email</label>
           <input
@@ -137,9 +140,7 @@ export default function RegistrationForm() {
           />
         </div>
 
-        {error && (
-          <p className="text-red-600 text-sm mt-2">{error}</p>
-        )}
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
         <button
           className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition disabled:opacity-50"

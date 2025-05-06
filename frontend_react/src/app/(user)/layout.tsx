@@ -29,9 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </h1>
       </div>
 
-      <AuthGuard>
-        {children}
-      </AuthGuard>
+      <AuthGuard>{children}</AuthGuard>
     </div>
   );
 }

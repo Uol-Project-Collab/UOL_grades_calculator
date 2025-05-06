@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthProvider";
 
-export default function AuthGuard({ children } : { children : React.ReactNode }){
+export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { remember } = useAuth();
 
@@ -12,20 +12,15 @@ export default function AuthGuard({ children } : { children : React.ReactNode })
     let token;
 
     if (remember) {
-      token = localStorage.getItem('authToken');
+      token = localStorage.getItem("authToken");
     } else {
-      token = sessionStorage.getItem('authToken');
+      token = sessionStorage.getItem("authToken");
     }
 
     if (!token) {
-      router.push('/');
+      router.push("/");
     }
-
   }, []);
 
-  return(
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

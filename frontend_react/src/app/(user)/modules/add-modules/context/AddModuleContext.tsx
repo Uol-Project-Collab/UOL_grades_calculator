@@ -20,7 +20,11 @@ export const useAddModule = () => {
   return context;
 };
 
-export const AddModuleProvider = ({ children }: { children: React.ReactNode }) => {
+export const AddModuleProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [selectedLevels, setSelectedLevels] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
 

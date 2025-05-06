@@ -57,9 +57,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="background flex flex-col items-center justify-center">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

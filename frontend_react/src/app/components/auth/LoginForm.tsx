@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
@@ -45,7 +45,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   const { email, setEmail, remember, setRemember } = useAuth();
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -81,30 +81,29 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
-    
+
       if (!response.ok) {
         throw new Error(data.error);
       }
 
       const { emaill, uid, token } = data;
 
-      if (remember){
+      if (remember) {
         // Store token securely (localStorage for now)
         localStorage.setItem("authToken", token);
       } else {
         sessionStorage.setItem("authToken", token);
       }
-      
 
       // If success, navigate to dashboard
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -117,7 +116,10 @@ export default function LoginForm() {
       <h1 className="text-sub text-text-dark text-center font-bold sm:text-left">
         Enter your details
       </h1>
-      <form className="flex w-full max-w-[30rem] flex-col" onSubmit={handleLogin}>
+      <form
+        className="flex w-full max-w-[30rem] flex-col"
+        onSubmit={handleLogin}
+      >
         <div className="mt-1 flex flex-col pt-1 pb-1">
           <label className="text-sm sm:text-base">Email</label>
           <input
@@ -149,9 +151,7 @@ export default function LoginForm() {
           </label>
         </div>
 
-        {error && (
-          <p className="text-red-600 text-sm mt-2">{error}</p>
-        )}
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
         <button
           className="bg-primary-dark text-background hover:bg-primary mt-4 flex cursor-pointer items-center justify-center rounded-lg p-2 transition disabled:opacity-50"
