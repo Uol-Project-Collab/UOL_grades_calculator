@@ -61,8 +61,8 @@ export default function RegistrationForm() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
       return;
     }
 
@@ -74,24 +74,29 @@ export default function RegistrationForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
+      const response = await fetch('http://localhost:3000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
+    
+      const data = await response.json();
+    
       if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message || "Registration failed.");
+        throw new Error(data.error);
       }
-
-      router.push('/dashboard'); // or '/login' if you prefer manual login
-    } catch (err: any) {
-      setError(err.message);
+    
+      router.push('/dashboard');
+    } catch (error: any) {
+      if (error.message === 'auth/email-already-in-use') {
+        setError("The email is already in use.");
+      } else {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }   
 
   return (
     <div className="flex h-[95%] flex-col items-center justify-around p-4 sm:p-6">

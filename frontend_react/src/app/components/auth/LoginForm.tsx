@@ -92,6 +92,7 @@ export default function LoginForm() {
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
+      console.log(err);
     } finally {
       setLoading(false);
     }
