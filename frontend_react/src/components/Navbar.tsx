@@ -47,6 +47,12 @@ export default function Navbar() {
     router.push(path);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Clear token on logout
+    router.push('/');  // Redirect to login page
+  };
+  
+
   return (
     <nav className="bg-primary-dark mt-2 flex w-fit flex-col justify-between rounded-2xl p-10">
       <ul className="mt-10 flex flex-col items-start gap-4">
@@ -82,8 +88,8 @@ export default function Navbar() {
         <li className={navLink}>
           <span className={materialIcon}>logout</span>
           <button
-            onClick={() => handleNavigation("/")}
-            className={`${navLink} ${pathname === "/" ? "font-bold" : ""}`}
+            onClick={handleLogout}
+            className={navLink}
           >
             Logout
           </button>

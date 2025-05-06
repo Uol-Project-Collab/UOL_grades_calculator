@@ -1,3 +1,5 @@
+import AuthGuard from "./components/AuthGuard";
+
 /**
  * Layout component that serves as the main structure for the user-facing pages.
  *
@@ -27,7 +29,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </h1>
       </div>
 
-      {children}
+      <AuthGuard>
+        {children}
+      </AuthGuard>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
 
 type AddModuleContextType = {
   selectedLevels: number[];
@@ -20,7 +20,7 @@ export const useAddModule = () => {
   return context;
 };
 
-export const AddModuleProvider = ({ children }: { children: ReactNode }) => {
+export const AddModuleProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedLevels, setSelectedLevels] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
 

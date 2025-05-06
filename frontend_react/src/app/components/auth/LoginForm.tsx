@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import { useAuth } from "../../context/AuthProvider";
 
 /**
  * LoginForm Component
@@ -44,10 +44,14 @@ import { useState } from "react";
 export default function LoginForm() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
+  const { email, setEmail, remember, setRemember } = useAuth();
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const handleRememberState = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRemember(event.target.checked);
+  };
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,10 +73,10 @@ export default function LoginForm() {
       return;
     }
 
-    // if (password.trim().length < 6) {
-    //   setError("Password must be at least 6 characters.");
-    //   return;
-    // }
+    if (password.length < 8) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
 
     setLoading(true);
 
@@ -88,6 +92,16 @@ export default function LoginForm() {
       if (!response.ok) {
         throw new Error(data.error);
       }
+
+      const { emaill, uid, token } = data;
+
+      if (remember){
+        // Store token securely (localStorage for now)
+        localStorage.setItem("authToken", token);
+      } else {
+        sessionStorage.setItem("authToken", token);
+      }
+      
 
       // If success, navigate to dashboard
       router.push('/dashboard');
@@ -123,6 +137,16 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleRememberState}
+              checked={remember}
+            />{" "}
+            Remember my password
+          </label>
         </div>
 
         {error && (
