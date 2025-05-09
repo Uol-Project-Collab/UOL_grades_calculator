@@ -1,26 +1,41 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useAuth } from "../../context/AuthProvider";
+import { useState, useEffect } from "react";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { remember } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let token;
-
-    if (remember) {
-      token = localStorage.getItem("authToken");
-    } else {
-      token = sessionStorage.getItem("authToken");
-    }
+    const token = localStorage.getItem("authToken") ?? sessionStorage.getItem("authToken");
 
     if (!token) {
-      router.push("/");
+      router.replace("/");
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
+  if (isLoading) {
+    return <div className="text-page text-primary-dark font-bold flex flex-row h-full w-full items-center justify-center">Loading...</div>; // Or your loading component
+  }
+
   return <>{children}</>;
-}
+};
+
+// export async function getServerSideProps(context) {
+//   // Check for auth cookie/token in the request
+//   const token = context.req.cookies.authToken;
+  
+//   if (!token) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     };
+//   }
+  
+//   return { props: {} };
+// }

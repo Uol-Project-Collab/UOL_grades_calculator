@@ -1,5 +1,5 @@
 import React from "react";
-import "./globals.css";
+import "./styles/globals.css";
 import { AuthProvider } from "./context/AuthProvider";
 /**
  * RootLayout component serves as the main layout wrapper for the application.

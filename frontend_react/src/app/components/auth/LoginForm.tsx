@@ -95,8 +95,9 @@ export default function LoginForm() {
 
       const { emaill, uid, token } = data;
 
-      if (remember) {
-        // Store token securely (localStorage for now)
+      console.log(token);
+
+      if (remember) {// Store token securely 
         localStorage.setItem("authToken", token);
       } else {
         sessionStorage.setItem("authToken", token);

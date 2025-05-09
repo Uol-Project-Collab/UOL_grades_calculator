@@ -49,6 +49,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken"); // Clear token on logout
+    sessionStorage.removeItem("authToken"); // Clear token on logout
     router.push("/"); // Redirect to login page
   };
 
