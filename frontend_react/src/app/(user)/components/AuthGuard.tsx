@@ -8,7 +8,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken") ?? sessionStorage.getItem("authToken");
+    const token =
+      localStorage.getItem("authToken") ?? sessionStorage.getItem("authToken");
 
     if (!token) {
       router.replace("/");
@@ -18,16 +19,20 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   }, []);
 
   if (isLoading) {
-    return <div className="text-page text-primary-dark font-bold flex flex-row h-full w-full items-center justify-center">Loading...</div>; // Or your loading component
+    return (
+      <div className="text-page text-primary-dark flex h-full w-full flex-row items-center justify-center font-bold">
+        Loading...
+      </div>
+    ); // Or your loading component
   }
 
   return <>{children}</>;
-};
+}
 
 // export async function getServerSideProps(context) {
 //   // Check for auth cookie/token in the request
 //   const token = context.req.cookies.authToken;
-  
+
 //   if (!token) {
 //     return {
 //       redirect: {
@@ -36,6 +41,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 //       },
 //     };
 //   }
-  
+
 //   return { props: {} };
 // }
