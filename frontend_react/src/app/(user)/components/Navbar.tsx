@@ -1,5 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
+import { logout } from "../../components/auth/AxiosAuth";
 
 /**
  * Navbar component that provides navigation links for the application.
@@ -47,9 +48,14 @@ export default function Navbar() {
     router.push(path);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Clear token on logout
-    sessionStorage.removeItem("authToken"); // Clear token on logout
+  const handleLogout = async () => {
+    try{
+      await logout(); // Call the logout function from AxiosAuth
+      console.log("Logout successful");
+    }
+    catch (error) {
+      console.error("Logout failed:", error);
+    }
     router.push("/"); // Redirect to login page
   };
 

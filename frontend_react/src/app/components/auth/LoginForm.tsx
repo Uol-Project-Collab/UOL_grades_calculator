@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 import { useAuth } from "../../context/AuthProvider";
+import { login } from "./AxiosAuth";
 
 /**
  * LoginForm Component
@@ -81,30 +82,10 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      // Use the login function from AxiosAuth
+      await login(email, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
-
-      const { emaill, uid, token } = data;
-
-      console.log(token);
-
-      if (remember) {
-        // Store token securely
-        localStorage.setItem("authToken", token);
-      } else {
-        sessionStorage.setItem("authToken", token);
-      }
-
-      // If success, navigate to dashboard
+      // Redirect to the dashboard after successful login
       router.push("/dashboard");
     } catch (error: any) {
       setError(error.message);

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signup } from "./AxiosAuth";
 
 /**
  * A React functional component that renders a registration form.
@@ -74,18 +75,10 @@ export default function RegistrationForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      // Use the signup function from AxiosAuth
+      await signup(email, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
-
+      // Redirect to the dashboard after successful login
       router.push("/dashboard");
     } catch (error: any) {
       if (error.message === "auth/email-already-in-use") {

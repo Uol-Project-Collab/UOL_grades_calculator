@@ -8,6 +8,13 @@ const catchAsync = require("../utils/catchAsync");
 const { clientAuth } = require("../config/firebase");
 const { sendPasswordResetEmail, confirmPasswordReset } = require("firebase/auth");
 
+options = {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'Strict',
+  // maxAge: 15 * 60 * 1000,
+}
+
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
@@ -34,7 +41,9 @@ router.post("/signup", async (req, res) => {
     });
     // generate custom token for client
     const token = await admin.auth().createCustomToken(user.uid);
-    res.status(201).json({ uid: user.uid, email, token });
+    // Store in HttpOnly cookie
+    res.cookie('authToken', token, options);
+    res.status(201).json({ uid: user.uid, email }); // Do not send the token here
   } catch (err) {
     console.error("Signup error:", err);
     res.status(400).json({ error: err.message });
@@ -49,11 +58,14 @@ router.post("/login", async (req, res) => {
   try {
     const user = await signIn(req.body.email, req.body.password);
     const token = await user.getIdToken();
-    res.json({ uid: user.uid, email: user.email, token });
+    // Store in HttpOnly cookie
+    res.cookie('authToken', token, options);
+    res.json({ uid: user.uid, email: user.email }); // Do not send the token here
   } catch (err) {
     res.status(401).json({ error: "Invalid credentials" });
   }
 });
+
 
 // LOGOUT -> revoke this user’s refresh tokens
 router.post("/logout", authenticate, async (req, res, next) => {
@@ -61,6 +73,10 @@ router.post("/logout", authenticate, async (req, res, next) => {
     const uid = req.user.uid;
     // Revoke all future tokens
     await admin.auth().revokeRefreshTokens(uid);
+    // Clear the auth token cookie
+    res.clearCookie("authToken", options);
+    // Clear the CSRF token cookie
+    res.clearCookie("_csrf", options);
     res.json({ success: true, message: "User logged out, tokens revoked." });
   } catch (err) {
     next(err);

@@ -9,12 +9,14 @@ const makeApiRequest = async (
   apiUrl: string,
   method: HttpMethod,
   data: any = null,
+  token: string | null = null,
 ): Promise<any> => {
   try {
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response =
       method === "POST"
-        ? await axios.post(apiUrl, data)
-        : await axios.get(apiUrl);
+        ? await axios.post(apiUrl, data, { headers })
+        : await axios.get(apiUrl, { headers });
 
     return response.data;
   } catch (error: any) {
@@ -48,8 +50,9 @@ const fetchModules = async (
   method: HttpMethod,
   data: any = null,
   shouldRestructure: boolean = true,
+  token: string | null = null,
 ): Promise<any> => {
-  const responseData = await makeApiRequest(apiUrl, method, data);
+  const responseData = await makeApiRequest(apiUrl, method, data, token);
   return method === "GET" && shouldRestructure
     ? restructureModulesByLevel(responseData)
     : responseData;
@@ -58,12 +61,16 @@ const fetchModules = async (
 /**
  * Fetch all modules.
  */
-export const fetchAllModules = async (
-  setModulesByLevel: (data: any) => void,
-) => {
+export const fetchAllModules = async (token: string | null = null) => {
   try {
-    const data = await fetchModules("http://localhost:3000/api/modules", "GET");
-    setModulesByLevel(data);
+    const data = await fetchModules(
+      "http://localhost:3000/api/modules",
+      "GET",
+      null,
+      true,
+      token,
+    );
+    return data;
   } catch (error) {
     console.error("Error fetching all modules:", error);
   }
@@ -74,12 +81,15 @@ export const fetchAllModules = async (
  */
 export const fetchSubmittedModules = async (
   setSubmittedModules: (data: any) => void,
-  studentId: string,
+  token: string | null = null,
 ) => {
   try {
     const data = await fetchModules(
-      `http://localhost:3000/api/students/${studentId}/modules/`,
+      `http://localhost:3000/api/modules/mine`,
       "GET",
+      null,
+      true,
+      token,
     );
     setSubmittedModules(data);
   } catch (error) {
@@ -92,14 +102,15 @@ export const fetchSubmittedModules = async (
  */
 export const postSubmittedModules = async (
   dataObject: any,
-  studentId: string,
+  token: string | null = null,
 ) => {
   try {
     await fetchModules(
-      `http://localhost:3000/api/students/${studentId}/modules/`,
+      `http://localhost:3000/api/modules/`,
       "POST",
       dataObject,
       false,
+      token,
     );
   } catch (error) {
     console.error("Error submitting modules:", error);
