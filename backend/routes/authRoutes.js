@@ -77,9 +77,44 @@ router.post("/logout", authenticate, async (req, res, next) => {
     res.clearCookie("authToken", options);
     // Clear the CSRF token cookie
     res.clearCookie("_csrf", options);
-    res.json({ success: true, message: "User logged out, tokens revoked." });
+    // res.json({ success: true, message: "User logged out, tokens revoked." });
   } catch (err) {
     next(err);
+  }
+});
+
+// VERIFY AUTHENTICATION STATUS
+router.get("/verify-session", async (req, res) => {
+  try {
+    const authToken = req.cookies.authToken;
+    
+    if (!authToken) {
+      return res.status(200).json({ 
+        authenticated: false,
+      });
+    }
+    
+    // Verify the token
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(authToken);
+      
+      res.json({ 
+        authenticated: true,
+        user: {
+          uid: decodedToken.uid,
+          email: decodedToken.email
+        }
+      });
+    } catch (tokenError) {
+      // Token validation failed, but we'll still use 200 with authenticated:false
+      return res.status(200).json({ 
+        authenticated: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ 
+      authenticated: false, 
+    });
   }
 });
 

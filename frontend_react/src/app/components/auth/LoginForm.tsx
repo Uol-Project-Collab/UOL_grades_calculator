@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
-import { useAuth } from "../../context/AuthProvider";
 import { login } from "./AxiosAuth";
 
 /**
@@ -45,7 +44,7 @@ import { login } from "./AxiosAuth";
 export default function LoginForm() {
   const router = useRouter();
 
-  const { email, setEmail, remember, setRemember } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -123,7 +122,7 @@ export default function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div>
+        {/* <div>
           <label>
             <input
               type="checkbox"
@@ -132,7 +131,7 @@ export default function LoginForm() {
             />{" "}
             Remember my password
           </label>
-        </div>
+        </div> */}
 
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 

@@ -6,6 +6,7 @@
     "@typescript-eslint/eslint-plugin": "8.31.1",
     "@typescript-eslint/parser": "8.31.1",
     "axios": "1.9.0",
+    "js-cookie": "3.0.5",
     "next": "15.3.1",
     "react": "19.1.0",
     "react-dom": "19.1.0"

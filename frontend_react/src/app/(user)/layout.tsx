@@ -1,5 +1,4 @@
-import AuthGuard from "./components/AuthGuard";
-import { ModulesProvider } from "./context/ModulesProvider";
+import { ProtectedRoutes } from "./components/ProtectedRoutes";
 /**
  * Layout component that serves as the main structure for the user-facing pages.
  *
@@ -23,17 +22,15 @@ import { ModulesProvider } from "./context/ModulesProvider";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-background mx-auto flex h-full w-[90%] flex-col p-1 md:w-[80%] md:p-2">
-      <AuthGuard>
-        <ModulesProvider>
-          <div className="w-full pt-10 text-right">
-            <h1 className="text-page text-text-dark mr-4 font-extrabold sm:ml-12 md:ml-24 lg:ml-48">
-              UOL Project Collab
-            </h1>
-          </div>
-        </ModulesProvider>
+      <div className="w-full pt-10 text-right">
+        <h1 className="text-page text-text-dark mr-4 font-extrabold sm:ml-12 md:ml-24 lg:ml-48">
+          UOL Project Collab
+        </h1>
+      </div>
 
+      <ProtectedRoutes>
         {children}
-      </AuthGuard>
+      </ProtectedRoutes>
     </div>
   );
 }

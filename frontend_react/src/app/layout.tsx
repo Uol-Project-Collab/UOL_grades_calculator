@@ -1,7 +1,5 @@
 import React from "react";
 import "./styles/globals.css";
-import { AuthProvider } from "./context/AuthProvider";
-import AuthRedirect from "./context/AuthRedirect";
 /**
  * RootLayout component serves as the main layout wrapper for the application.
  * It defines the HTML structure, including the `<html>` and `<body>` tags,
@@ -58,9 +56,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="background flex flex-col items-center justify-center">
-        <AuthProvider>
-          <AuthRedirect>{children}</AuthRedirect>
-        </AuthProvider>
+        {children}
       </body>
     </html>
   );

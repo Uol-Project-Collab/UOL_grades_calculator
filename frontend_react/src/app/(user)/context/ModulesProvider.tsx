@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { fetchAllModules } from "../components/FetchModules";
 
 interface Module {
   moduleCode: string;
@@ -19,18 +18,18 @@ const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
 export const ModulesProvider = ({ children }: { children: ReactNode }) => {
   const [modules, setModules] = useState<Module[]>([]);
 
-  useEffect(() => {
-    const loadModules = async () => {
-      try {
-        const data = await fetchAllModules();
-        setModules(data);
-      } catch (error) {
-        console.error("Failed to load modules");
-      }
-    };
+  // useEffect(() => {
+  //   const loadModules = async () => {
+  //     try {
+  //       const data = await fetchAllModules();
+  //       setModules(data);
+  //     } catch (error) {
+  //       console.error("Failed to load modules");
+  //     }
+  //   };
 
-    loadModules();
-  }, []);
+  //   loadModules();
+  // }, []);
 
   return (
     <ModulesContext.Provider value={{ modules, setModules }}>

@@ -50,13 +50,13 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try{
-      await logout(); // Call the logout function from AxiosAuth
-      console.log("Logout successful");
+      await logout();
+
+      router.push("/"); // Redirect to login page
     }
     catch (error) {
       console.error("Logout failed:", error);
     }
-    router.push("/"); // Redirect to login page
   };
 
   return (

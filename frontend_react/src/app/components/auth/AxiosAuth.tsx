@@ -72,7 +72,6 @@ export const logout = async () => {
         withCredentials: true, // Include cookies in the request
       }
     );
-    return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
       throw new Error(error.response.data.error || "Logout failed");
