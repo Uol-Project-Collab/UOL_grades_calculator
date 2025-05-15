@@ -28,6 +28,10 @@ export const ModulesProvider = ({ children }: { children: ReactNode }) => {
   const loadModules = async () => {
     try {
       const data = await FetchAllModules();
+
+      /**
+       * Before setting it i need to refactor the data.
+      */
       setModules(data);
     } catch (error) {
       console.error("Failed to load modules", error);

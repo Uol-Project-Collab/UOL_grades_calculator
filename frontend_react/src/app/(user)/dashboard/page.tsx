@@ -2,11 +2,8 @@
 
 import Header from "../(components)/Header";
 import Navbar from "../(components)/Navbar";
-import { useModules } from "../modules/add-modules/(context)/ModulesProvider"; //-- allmodules
 
 export default function Dashboard() {
-  const { modules } = useModules(); //-- allmodules
-
   return (
     <>
       <Header

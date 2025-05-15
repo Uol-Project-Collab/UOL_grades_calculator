@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useAddModule } from "../(context)/AddModuleProvider";
 import AddModulesHeader from "./AddModulesHeader";
-import { ModulesProvider } from "../(context)/ModulesProvider";
+import { ModulesProvider, useModules } from "../(context)/ModulesDataProvider";
 
 export default function AddModulesStep2() {
   const { selectedLevels, setCurrentStep } = useAddModule();
-  
+  const { modules } = useModules();
   const [levelTable, setLevelTable] = useState(selectedLevels[0]);
   const highlight =
     "text-sub mr-6 font-semibold text-text-dark underline cursor-pointer";
@@ -16,6 +16,15 @@ export default function AddModulesStep2() {
   const handleSelectedLevel = (level: number) => {
     if (level === 4) {
       setLevelTable(4);
+
+      /**
+       * Show list of modules in table according to design figma for only selected level: 4
+       * include RPL checkbox
+       * need context to keep record of data
+       * and when users cancel it should be dropped
+       * method to add grade
+      */
+
     } else if (level === 5) {
       setLevelTable(5);
     } else if (level === 6) {
@@ -24,7 +33,7 @@ export default function AddModulesStep2() {
   };
 
   return (
-    <ModulesProvider>
+    <>
       <AddModulesHeader message="Add Grades" />
       <p className="text-center">
         Please note that when you add grades the module is automatically
@@ -61,6 +70,9 @@ export default function AddModulesStep2() {
             modules)
           </p>
         </div>
+        <div>
+          Selected Level List:
+        </div>
       </div>
 
       <div className="ml-2 flex flex-row items-center justify-between">
@@ -87,6 +99,6 @@ export default function AddModulesStep2() {
           </span>
         </button>
       </div>
-    </ModulesProvider>
+    </>
   );
 }

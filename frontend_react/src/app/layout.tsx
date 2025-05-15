@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/globals.css";
+import "./(styles)/globals.css";
 /**
  * RootLayout component serves as the main layout wrapper for the application.
  * It defines the HTML structure, including the `<html>` and `<body>` tags,
