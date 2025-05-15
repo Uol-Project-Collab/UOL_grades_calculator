@@ -21,7 +21,7 @@ export const login = async (email: string, password: string) => {
           "X-CSRF-Token": csrfToken, // 💡 Send CSRF Token in header
         },
         withCredentials: true, // Include cookies in the request
-      }
+      },
     );
 
     return response.data; // Return the response data
@@ -45,7 +45,7 @@ export const signup = async (email: string, password: string) => {
           "X-CSRF-Token": csrfToken, // Include CSRF token in the header
         },
         withCredentials: true, // Include cookies in the request
-      }
+      },
     );
     return response.data;
   } catch (error: any) {
@@ -55,7 +55,6 @@ export const signup = async (email: string, password: string) => {
     throw new Error("An unexpected error occurred.");
   }
 };
-
 
 // not working yet, need to check the backend
 export const logout = async () => {
@@ -70,7 +69,7 @@ export const logout = async () => {
           "X-CSRF-Token": csrfToken, // Include CSRF token in the header
         },
         withCredentials: true, // Include cookies in the request
-      }
+      },
     );
 
     return response.data;

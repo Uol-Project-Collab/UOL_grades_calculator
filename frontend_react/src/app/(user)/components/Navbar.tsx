@@ -49,12 +49,11 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
-    try{
+    try {
       const response = logout();
       console.log("Logout successful:", response);
       router.push("/"); // Redirect to login page
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Logout failed:", error);
     }
   };

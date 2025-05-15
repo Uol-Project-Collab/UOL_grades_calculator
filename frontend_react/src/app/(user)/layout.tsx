@@ -28,9 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </h1>
       </div>
 
-      <ProtectedRoutes>
-        {children}
-      </ProtectedRoutes>
+      <ProtectedRoutes>{children}</ProtectedRoutes>
     </div>
   );
 }
