@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { logout } from "../../components/auth/AxiosAuth";
+import { logout } from "../../(components)/auth/AxiosAuth";
 
 /**
  * Navbar component that provides navigation links for the application.

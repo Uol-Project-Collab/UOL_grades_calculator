@@ -1,4 +1,4 @@
-import { ProtectedRoutes } from "./utils/ProtectedRoutes";
+import { ProtectedRoutes } from "./(utils)/ProtectedRoutes";
 /**
  * Layout component that serves as the main structure for the user-facing pages.
  *

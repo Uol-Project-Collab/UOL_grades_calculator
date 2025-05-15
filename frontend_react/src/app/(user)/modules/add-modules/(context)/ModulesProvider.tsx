@@ -7,7 +7,7 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { FetchAllModules } from "../../../utils/FetchAllModules"
+import { FetchAllModules } from "../../../(utils)/FetchAllModules"
 
 interface Module {
   moduleCode: string;

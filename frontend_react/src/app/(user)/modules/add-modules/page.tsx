@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAddModule } from "./context/AddModuleContext";
-import ProgressBar from "./components/ProgressBar";
-import Step1 from "./components/Step1";
-import Step2 from "./components/Step2";
-import Step3 from "./components/Step3";
+import { useAddModule } from "./(context)/AddModuleProvider";
+import ProgressBar from "./(components)/ProgressBar";
+import Step1 from "./(components)/Step1";
+import Step2 from "./(components)/Step2";
+import Step3 from "./(components)/Step3";
 
 export default function Page() {
   const router = useRouter();

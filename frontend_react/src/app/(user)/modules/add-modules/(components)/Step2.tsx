@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useAddModule } from "../context/AddModuleContext";
+import { useAddModule } from "../(context)/AddModuleProvider";
 import AddModulesHeader from "./AddModulesHeader";
-import { ModulesProvider } from "../context/ModulesProvider";
+import { ModulesProvider } from "../(context)/ModulesProvider";
 
 export default function AddModulesStep2() {
   const { selectedLevels, setCurrentStep } = useAddModule();
+  
   const [levelTable, setLevelTable] = useState(selectedLevels[0]);
   const highlight =
     "text-sub mr-6 font-semibold text-text-dark underline cursor-pointer";

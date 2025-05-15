@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FetchCsrfToken } from "../../components/auth/FetchCsrfToken";
+import { FetchCsrfToken } from "../../(components)/auth/FetchCsrfToken";
 
 export const FetchAllModules = async () => {
   try {

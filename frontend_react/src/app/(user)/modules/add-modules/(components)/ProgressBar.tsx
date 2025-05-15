@@ -1,4 +1,4 @@
-import { useAddModule } from "../context/AddModuleContext";
+import { useAddModule } from "../(context)/AddModuleProvider";
 
 export default function ProgressBar() {
   const { currentStep } = useAddModule();

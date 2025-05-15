@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import AddModulesHeader from "./AddModulesHeader";
-import { useAddModule } from "../context/AddModuleContext";
+import { useAddModule } from "../(context)/AddModuleProvider";
 
 export default function Step1() {
   const { selectedLevels, setSelectedLevels, setCurrentStep } = useAddModule();

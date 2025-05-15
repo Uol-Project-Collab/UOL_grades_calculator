@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import LoginForm from "./components/auth/LoginForm";
-import RegisterForm from "./components/auth/RegisterForm";
+import LoginForm from "./(components)/auth/LoginForm";
+import RegisterForm from "./(components)/auth/RegisterForm";
 
 /**
  * The `Home` component serves as the main page for the application.
