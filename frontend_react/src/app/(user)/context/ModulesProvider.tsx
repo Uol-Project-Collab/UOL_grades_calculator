@@ -7,6 +7,7 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { FetchAllModules } from "../components/FetchAllModules"
 
 interface Module {
   moduleCode: string;
@@ -24,18 +25,18 @@ const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
 export const ModulesProvider = ({ children }: { children: ReactNode }) => {
   const [modules, setModules] = useState<Module[]>([]);
 
-  // useEffect(() => {
-  //   const loadModules = async () => {
-  //     try {
-  //       const data = await fetchAllModules();
-  //       setModules(data);
-  //     } catch (error) {
-  //       console.error("Failed to load modules");
-  //     }
-  //   };
+  const loadModules = async () => {
+    try {
+      const data = await FetchAllModules();
+      setModules(data);
+    } catch (error) {
+      console.error("Failed to load modules", error);
+    }
+  };
 
-  //   loadModules();
-  // }, []);
+  useEffect(() => {
+    loadModules();
+  }, []);
 
   return (
     <ModulesContext.Provider value={{ modules, setModules }}>

@@ -1,17 +1,11 @@
 import axios from "axios";
-
-export const fetchCsrfToken = async () => {
-  const response = await axios.get("http://localhost:3000/api/csrf-token", {
-    withCredentials: true,
-  });
-  return response.data.csrfToken;
-};
+import { FetchCsrfToken } from "../FetchCsrfToken";
 
 const API_BASE_URL = "http://localhost:3000/api/auth";
 
 export const login = async (email: string, password: string) => {
   try {
-    const csrfToken = await fetchCsrfToken();
+    const csrfToken = await FetchCsrfToken();
     const response = await axios.post(
       `${API_BASE_URL}/login`,
       { email, password },
@@ -35,7 +29,7 @@ export const login = async (email: string, password: string) => {
 
 export const signup = async (email: string, password: string) => {
   try {
-    const csrfToken = await fetchCsrfToken();
+    const csrfToken = await FetchCsrfToken();
     const response = await axios.post(
       `${API_BASE_URL}/signup`,
       { email, password },
@@ -58,7 +52,7 @@ export const signup = async (email: string, password: string) => {
 
 export const logout = async () => {
   try {
-    const csrfToken = await fetchCsrfToken();
+    const csrfToken = await FetchCsrfToken();
     const response = await axios.post(
       `${API_BASE_URL}/logout`,
       {},
