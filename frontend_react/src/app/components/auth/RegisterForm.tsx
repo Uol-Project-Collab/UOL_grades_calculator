@@ -75,10 +75,7 @@ export default function RegistrationForm() {
     setLoading(true);
 
     try {
-      // Use the signup function from AxiosAuth
       await signup(email, password);
-
-      // Redirect to the dashboard after successful login
       router.push("/dashboard");
     } catch (error: any) {
       if (error.message === "auth/email-already-in-use") {

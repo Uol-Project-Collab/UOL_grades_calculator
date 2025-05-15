@@ -9,7 +9,6 @@ export function ProtectedRoutes({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // In ProtectedRoutes.tsx, modify the verification function
     async function verifyAuthentication() {
       try {
         const response = await fetch(

@@ -18,13 +18,13 @@ export const login = async (email: string, password: string) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken, // 💡 Send CSRF Token in header
+          "X-CSRF-Token": csrfToken,
         },
-        withCredentials: true, // Include cookies in the request
+        withCredentials: true,
       },
     );
 
-    return response.data; // Return the response data
+    return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
       throw new Error(error.response.data.error || "Login failed");
@@ -35,16 +35,16 @@ export const login = async (email: string, password: string) => {
 
 export const signup = async (email: string, password: string) => {
   try {
-    const csrfToken = await fetchCsrfToken(); // Fetch CSRF token
+    const csrfToken = await fetchCsrfToken();
     const response = await axios.post(
       `${API_BASE_URL}/signup`,
       { email, password },
       {
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken, // Include CSRF token in the header
+          "X-CSRF-Token": csrfToken,
         },
-        withCredentials: true, // Include cookies in the request
+        withCredentials: true,
       },
     );
     return response.data;
@@ -56,19 +56,18 @@ export const signup = async (email: string, password: string) => {
   }
 };
 
-// not working yet, need to check the backend
 export const logout = async () => {
   try {
-    const csrfToken = await fetchCsrfToken(); // Fetch CSRF token
+    const csrfToken = await fetchCsrfToken();
     const response = await axios.post(
       `${API_BASE_URL}/logout`,
       {},
       {
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken, // Include CSRF token in the header
+          "X-CSRF-Token": csrfToken,
         },
-        withCredentials: true, // Include cookies in the request
+        withCredentials: true,
       },
     );
 

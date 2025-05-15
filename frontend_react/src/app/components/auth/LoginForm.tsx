@@ -81,10 +81,7 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      // Use the login function from AxiosAuth
       await login(email, password);
-
-      // Redirect to the dashboard after successful login
       router.push("/dashboard");
     } catch (error: any) {
       setError(error.message);
