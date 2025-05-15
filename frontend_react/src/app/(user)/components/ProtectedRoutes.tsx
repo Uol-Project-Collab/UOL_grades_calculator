@@ -9,20 +9,17 @@ export function ProtectedRoutes({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // In ProtectedRoutes.tsx, modify the verification function
     async function verifyAuthentication() {
       try {
         const response = await fetch('http://localhost:3000/api/auth/verify-session', {
           credentials: 'include',
         });
 
-        if (!response.ok) {
-          router.replace("/");
-          return;
-        }
-
         const data = await response.json();
         
         if (!data.authenticated) {
+          // User is not authenticated, redirect them
           router.replace("/");
           return;
         }

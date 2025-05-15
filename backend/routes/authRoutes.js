@@ -77,7 +77,7 @@ router.post("/logout", authenticate, async (req, res, next) => {
     res.clearCookie("authToken", options);
     // Clear the CSRF token cookie
     res.clearCookie("_csrf", options);
-    // res.json({ success: true, message: "User logged out, tokens revoked." });
+    res.status(200).json({ success: true, message: "Logout successful" });
   } catch (err) {
     next(err);
   }
@@ -107,7 +107,7 @@ router.get("/verify-session", async (req, res) => {
       });
     } catch (tokenError) {
       // Token validation failed, but we'll still use 200 with authenticated:false
-      return res.status(200).json({ 
+      return res.status(401).json({ 
         authenticated: false,
       });
     }

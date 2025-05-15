@@ -50,8 +50,8 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try{
-      await logout();
-
+      const response = logout();
+      console.log("Logout successful:", response);
       router.push("/"); // Redirect to login page
     }
     catch (error) {
