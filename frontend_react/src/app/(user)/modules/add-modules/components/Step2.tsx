@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAddModule } from "../context/AddModuleContext";
 import AddModulesHeader from "./AddModulesHeader";
+import { ModulesProvider } from "../context/ModulesProvider";
 
 export default function AddModulesStep2() {
   const { selectedLevels, setCurrentStep } = useAddModule();
@@ -22,7 +23,7 @@ export default function AddModulesStep2() {
   };
 
   return (
-    <>
+    <ModulesProvider>
       <AddModulesHeader message="Add Grades" />
       <p className="text-center">
         Please note that when you add grades the module is automatically
@@ -85,6 +86,6 @@ export default function AddModulesStep2() {
           </span>
         </button>
       </div>
-    </>
+    </ModulesProvider>
   );
 }

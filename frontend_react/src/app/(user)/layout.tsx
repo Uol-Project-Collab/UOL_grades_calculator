@@ -1,5 +1,4 @@
-import { ProtectedRoutes } from "./components/ProtectedRoutes";
-import { ModulesProvider } from "./context/ModulesProvider";
+import { ProtectedRoutes } from "./utils/ProtectedRoutes";
 /**
  * Layout component that serves as the main structure for the user-facing pages.
  *
@@ -30,9 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <ProtectedRoutes>
-        <ModulesProvider>
-          {children}
-        </ModulesProvider>
+        {children}
       </ProtectedRoutes>
     </div>
   );

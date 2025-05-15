@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FetchCsrfToken } from "../FetchCsrfToken";
+import { FetchCsrfToken } from "./FetchCsrfToken";
 
 const API_BASE_URL = "http://localhost:3000/api/auth";
 
