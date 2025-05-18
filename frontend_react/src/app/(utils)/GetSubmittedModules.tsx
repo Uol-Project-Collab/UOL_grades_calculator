@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FetchCsrfToken } from "../../../(utils)/FetchCsrfToken";
+import { FetchCsrfToken } from "./FetchCsrfToken";
 
 export const GetSubmittedModules = async () => {
   try {
@@ -14,10 +14,12 @@ export const GetSubmittedModules = async () => {
         withCredentials: true,
       },
     );
-
+    
     return response.data;
   }
   catch (error: any) {
     console.error("Error fetching modules:", error);
+    // Return default structure instead of undefined
+    return { success: false, modules: [] };
   }
 }

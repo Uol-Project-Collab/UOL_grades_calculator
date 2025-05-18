@@ -1,26 +1,20 @@
+/**
+ * Props for the Card component
+ */
 interface CardProps {
+  key?: React.Key;
   moduleName: string;
   moduleCode: string;
-  grade: number;
+  grade: number;  
 }
 
 /**
  * A React functional component that represents a card displaying module information
  * and a visual representation of the grade percentage.
- *
- * @component
- * @param {CardProps} props - The properties passed to the Card component.
- * @param {string} props.moduleName - The name of the module being displayed.
- * @param {string} props.moduleCode - The code of the module being displayed.
- * @param {number} props.grade - The grade percentage for the module, used to
- *                               render a circular progress indicator.
- *
- * @returns {JSX.Element} A styled card component containing module details,
- *                        an edit button, and a circular grade indicator.
- *
+ * 
  * @example
  * <Card moduleName="Mathematics" moduleCode="MATH101" grade={85} />
- *
+ * 
  * @remarks
  * - The circular progress indicator is implemented using an SVG element with
  *   two circles, where the second circle's strokeDasharray is dynamically

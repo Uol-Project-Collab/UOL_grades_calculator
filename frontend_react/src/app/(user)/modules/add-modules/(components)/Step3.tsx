@@ -39,46 +39,50 @@ export default function Step3() {
     return "Fail";
   };
 
-  const handleRemoveModule = (moduleCode: string) => {
-    if (confirm("Are you sure you want to remove this module?")) {
-      removeModule(moduleCode);
-    }
-  };
+  // const handleRemoveModule = (moduleCode: string) => {
+  //   if (confirm("Are you sure you want to remove this module?")) {
+  //     removeModule(moduleCode);
+  //   }
+  // };
 
   const handleSubmission = async () => {
     try {
       // First check if user is authenticated
       const authCheck = await axios.get("http://localhost:3000/api/auth/verify-session", {
-        withCredentials: true
+        withCredentials: true,
       });
-      
+
       if (!authCheck.data.authenticated) {
         alert("You are not authenticated. Please log in again.");
         // Redirect to login page
         window.location.href = "/login";
         return;
       }
-      
-      // Continue with module submission...
+
+      // Prepare valid modules for submission
       const validModules = modulesWithGrades
         .filter(module => module.isRpl || (module.grade && module.grade.trim() !== ""))
-        .map(({ moduleCode, grade, isRpl }) => ({
+        .map(({ moduleCode, level, moduleName, grade, isRpl }) => ({
           moduleCode,
-          grade: isRpl ? "RPL" : grade,
+          level,
+          moduleName,
+          grade: isRpl ? "RPL" : grade, // Handle RPL case
         }));
-        
+
       if (validModules.length === 0) {
         alert("Please add grades to your modules before submitting");
         return;
       }
-        
-      await SubmitModules({ modules: validModules });
 
-      router.push("/dashboard");
+      // Submit modules to the backend
+      await SubmitModules(validModules);
+
+      // Redirect to dashboard after successful submission
+      router.replace("/modules");
     } catch (error) {
-      console.error('SubmitModules failed:', error);
+      console.error("SubmitModules failed:", error);
       alert("Failed to submit modules. Please check console for details.");
-    }           
+    }
   }
 
   // Column width styles to ensure consistency across all tables

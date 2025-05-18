@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Header from "../(components)/Header";
 import Navbar from "../(components)/Navbar";
 import { useRouter } from "next/navigation";
-import Card from "./components/Card";
-import { GetSubmittedModules } from "./(utils)/GetSubmittedModules";
+import Card from "./(components)/Card";
+import { useUserData } from "../../(context)/UserData";
 
 /**
  * The `Modules` component represents a page that displays the user's current modules
@@ -37,26 +37,9 @@ import { GetSubmittedModules } from "./(utils)/GetSubmittedModules";
  */
 export default function Modules() {
   const router = useRouter();
-  const [modules, setModules] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    async function fetchModules() {
-      try {
-        const data = await GetSubmittedModules();
-        if (data) {
-          setModules(data);
-          console.log("Modules fetched successfully:", data);
-        }
-      } catch (error) {
-        console.error("Error fetching modules:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchModules();
-  }, []);
+  const { userModules, loading } = useUserData();
+
+  console.log("Modules:", userModules);
 
   return (
     <>
@@ -101,18 +84,23 @@ export default function Modules() {
             </div>
           </div>
           <div className="flex w-full flex-row flex-wrap pl-6">
-            {/* {loading ? (
+            {loading ? (
               <p>Loading modules...</p>
+            ) : userModules.modules.length === 0 ? (
+              <div className="flex flex-col items-center justify-center w-full py-8">
+              <p className="text-gray-500 mb-2">No modules found</p>
+              <p className="text-gray-400">Try adding some modules using the "Add Module" button above</p>
+              </div>
             ) : (
-              modules.map((module) => (
-                <Card
-                  key={module.id}
-                  moduleName={module.name}
-                  moduleCode={module.code}
-                  grade={module.grade}
-                />
+              userModules.modules.map((module, index) => (
+              <Card
+                key={`${module.moduleCode}-${index}`}
+                moduleName={module.moduleName}
+                moduleCode={module.moduleCode}
+                grade={module.grade}
+              />
               ))
-            )} */}
+            )}
           </div>
         </div>
       </div>

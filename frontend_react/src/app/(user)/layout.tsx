@@ -1,3 +1,4 @@
+import { UserDataProvider } from "../(context)/UserData";
 import { ProtectedRoutes } from "./(utils)/ProtectedRoutes";
 /**
  * Layout component that serves as the main structure for the user-facing pages.
@@ -29,7 +30,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <ProtectedRoutes>
-        {children}
+        <UserDataProvider>
+          {children}
+        </UserDataProvider>
       </ProtectedRoutes>
     </div>
   );
