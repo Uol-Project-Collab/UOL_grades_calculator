@@ -36,7 +36,7 @@ export default function Step1() {
 
       <p className="text-body text-center text-red-500">{error}</p>
 
-      <div className="m-10 flex h-90 flex-col p-10">
+      <div className="m-10 flex h-full flex-col p-10">
         <label>
           <input
             type="checkbox"

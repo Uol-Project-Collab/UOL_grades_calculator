@@ -1,55 +1,33 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
-import { FetchAllModules } from "../../../(utils)/FetchAllModules"
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { FetchAllModules } from "../../../(utils)/FetchAllModules";
 
-interface Module {
-  moduleCode: string;
-  moduleName: string;
-  grade?: string;
-}
-
-interface ModulesContextType {
-  modules: Module[];
-  setModules: React.Dispatch<React.SetStateAction<Module[]>>;
-}
-
-const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
+const ModulesContext = createContext<any>(undefined);
 
 export const ModulesProvider = ({ children }: { children: ReactNode }) => {
-  const [modules, setModules] = useState<Module[]>([]);
-
-  const loadModules = async () => {
-    try {
-      const data = await FetchAllModules();
-
-      /**
-       * Before setting it i need to refactor the data.
-      */
-      setModules(data);
-    } catch (error) {
-      console.error("Failed to load modules", error);
-    }
-  };
+  const [data, setData] = useState();
 
   useEffect(() => {
-    loadModules();
+    const fetchData = async () => {
+      try {
+        setData(await FetchAllModules());
+      } catch (error) {
+        console.error("Failed to load modules", error);
+      }
+    };
+    
+    fetchData();
   }, []);
 
   return (
-    <ModulesContext.Provider value={{ modules, setModules }}>
+    <ModulesContext.Provider value={{ data }}>
       {children}
     </ModulesContext.Provider>
   );
 };
 
-export const useModules = (): ModulesContextType => {
+export const useModules = () => {
   const context = useContext(ModulesContext);
   if (!context) {
     throw new Error("useModules must be used within a ModulesProvider");
