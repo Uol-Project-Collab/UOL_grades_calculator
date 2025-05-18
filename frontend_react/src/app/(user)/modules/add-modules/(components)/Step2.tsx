@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAddModule } from "../(context)/AddModuleProvider";
 import AddModulesHeader from "./AddModulesHeader";
 import { useModules } from "../(context)/ModulesDataProvider";
+import { useGrades } from "../(context)/GradesProvider";
 
 export default function AddModulesStep2() {
   const { selectedLevels, setCurrentStep } = useAddModule();
   const { data } = useModules();
+  const { 
+    modulesWithGrades, 
+    setModuleWithGrade, 
+    updateGrade, 
+    updateRplStatus, 
+    hasModule 
+  } = useGrades();
+  
   const [levelTable, setLevelTable] = useState(selectedLevels[0]);
-  const [moduleGrades, setModuleGrades] = useState<{[key: string]: string}>({});
-  const [rplModules, setRplModules] = useState<{[key: string]: boolean}>({});
   
   let displayModules = [];
   if(data){
@@ -33,21 +40,43 @@ export default function AddModulesStep2() {
     }
   };
 
-  const handleGradeChange = (moduleCode: string, value: string) => {
+  const handleGradeChange = (module: any, value: string) => {
     // Only allow numbers between 0-100
     if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= 100)) {
-      setModuleGrades({
-        ...moduleGrades,
-        [moduleCode]: value
-      });
+      const isRpl = hasModule(module.moduleCode) 
+        ? modulesWithGrades.find(m => m.moduleCode === module.moduleCode)?.isRpl || false
+        : false;
+        
+      if (hasModule(module.moduleCode)) {
+        updateGrade(module.moduleCode, value);
+      } else {
+        setModuleWithGrade(module, value, isRpl);
+      }
     }
   };
 
-  const handleRplChange = (moduleCode: string, checked: boolean) => {
-    setRplModules({
-      ...rplModules,
-      [moduleCode]: checked
-    });
+  const handleRplChange = (module: any, checked: boolean) => {
+    const grade = hasModule(module.moduleCode)
+      ? modulesWithGrades.find(m => m.moduleCode === module.moduleCode)?.grade || ""
+      : "";
+      
+    if (hasModule(module.moduleCode)) {
+      updateRplStatus(module.moduleCode, checked);
+    } else {
+      setModuleWithGrade(module, grade, checked);
+    }
+  };
+
+  // Helper function to get the current grade for a module
+  const getModuleGrade = (moduleCode: string): string => {
+    const module = modulesWithGrades.find(m => m.moduleCode === moduleCode);
+    return module ? module.grade : "";
+  };
+
+  // Helper function to get the current RPL status for a module
+  const getModuleRplStatus = (moduleCode: string): boolean => {
+    const module = modulesWithGrades.find(m => m.moduleCode === moduleCode);
+    return module ? module.isRpl : false;
   };
 
   return (
@@ -109,8 +138,8 @@ export default function AddModulesStep2() {
                         <input
                           type="text"
                           className="w-16 border p-1 text-center"
-                          value={moduleGrades[module.moduleCode] || ""}
-                          onChange={(e) => handleGradeChange(module.moduleCode, e.target.value)}
+                          value={getModuleGrade(module.moduleCode)}
+                          onChange={(e) => handleGradeChange(module, e.target.value)}
                           placeholder="0-100"
                         />
                       </td>
@@ -118,8 +147,8 @@ export default function AddModulesStep2() {
                         <input
                           type="checkbox"
                           className="h-4 w-4"
-                          checked={rplModules[module.moduleCode] || false}
-                          onChange={(e) => handleRplChange(module.moduleCode, e.target.checked)}
+                          checked={getModuleRplStatus(module.moduleCode)}
+                          onChange={(e) => handleRplChange(module, e.target.checked)}
                         />
                       </td>
                     </tr>

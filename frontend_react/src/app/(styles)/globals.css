@@ -51,7 +51,8 @@ body {
 
 .background {
   background:
-    url("/honeycomb-bg.png") no-repeat center/cover,
+    url("/honeycomb-bg.png") repeat center/cover,
     linear-gradient(63deg, var(--color-primary-dark), var(--color-primary));
   background-blend-mode: soft-light, normal;
+  background-attachment: fixed;
 }

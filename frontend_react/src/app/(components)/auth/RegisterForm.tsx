@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signup } from "./AxiosAuth";
+import { signup } from "../../(utils)/AxiosAuth";
 
 /**
  * A React functional component that renders a registration form.

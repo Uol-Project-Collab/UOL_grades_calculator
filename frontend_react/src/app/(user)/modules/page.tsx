@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Header from "../(components)/Header";
 import Navbar from "../(components)/Navbar";
 import { useRouter } from "next/navigation";
 import Card from "./components/Card";
+import { GetSubmittedModules } from "./(utils)/GetSubmittedModules";
 
 /**
  * The `Modules` component represents a page that displays the user's current modules
@@ -35,6 +37,27 @@ import Card from "./components/Card";
  */
 export default function Modules() {
   const router = useRouter();
+  const [modules, setModules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchModules() {
+      try {
+        const data = await GetSubmittedModules();
+        if (data) {
+          setModules(data);
+          console.log("Modules fetched successfully:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching modules:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchModules();
+  }, []);
+
   return (
     <>
       <Header
@@ -78,26 +101,18 @@ export default function Modules() {
             </div>
           </div>
           <div className="flex w-full flex-row flex-wrap pl-6">
-            <Card
-              moduleName="Introduction to Programming"
-              moduleCode="CM-1010"
-              grade={80}
-            />
-            <Card
-              moduleName="Introduction to Programming"
-              moduleCode="CM-1010"
-              grade={80}
-            />
-            <Card
-              moduleName="Introduction to Programming"
-              moduleCode="CM-1010"
-              grade={80}
-            />
-            <Card
-              moduleName="Introduction to Programming"
-              moduleCode="CM-1010"
-              grade={80}
-            />
+            {/* {loading ? (
+              <p>Loading modules...</p>
+            ) : (
+              modules.map((module) => (
+                <Card
+                  key={module.id}
+                  moduleName={module.name}
+                  moduleCode={module.code}
+                  grade={module.grade}
+                />
+              ))
+            )} */}
           </div>
         </div>
       </div>

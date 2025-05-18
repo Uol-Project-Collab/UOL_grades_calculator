@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { FetchAllModules } from "../../../(utils)/FetchAllModules";
+import { FetchAllModules } from "../(utils)/FetchAllModules";
 
 const ModulesContext = createContext<any>(undefined);
 

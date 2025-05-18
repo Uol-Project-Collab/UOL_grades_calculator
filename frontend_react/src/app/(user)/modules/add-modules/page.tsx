@@ -22,7 +22,7 @@ export default function Page() {
   };
 
   return (
-    <>
+    <div className="h-auto">
       <div>
         <button
           type="button"
@@ -44,6 +44,6 @@ export default function Page() {
       <ProgressBar />
 
       <div>{renderSteps()}</div>
-    </>
+    </div>
   );
 }

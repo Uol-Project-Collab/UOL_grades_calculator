@@ -50,12 +50,12 @@ export default function RootLayout({
          * in alphabetical order.
          */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=add,arrow_left_alt,arrow_right_alt,cancel,desktop_windows,edit_square,import_contacts,login,logout,monitoring,person_add"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=add,arrow_left_alt,arrow_right_alt,cancel,check,desktop_windows,edit_square,import_contacts,login,logout,monitoring,person_add"
           rel="stylesheet"
         />
         <link rel="shortcut icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="background flex flex-col items-center justify-center">
+      <body className="background min-h-screen">
         {children}
       </body>
     </html>

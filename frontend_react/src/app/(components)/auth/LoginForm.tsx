@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useContext } from "react";
-import { login } from "./AxiosAuth";
+import { useState } from "react";
+import { login } from "../../(utils)/AxiosAuth";
 
 /**
  * LoginForm Component
@@ -49,9 +49,9 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleRememberState = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRemember(event.target.checked);
-  };
+  // const handleRememberState = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setRemember(event.target.checked);
+  // };
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
