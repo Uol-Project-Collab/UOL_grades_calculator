@@ -16,8 +16,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write .",
-    "frontend": "run dev"
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.4",

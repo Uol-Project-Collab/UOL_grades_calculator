@@ -7,7 +7,7 @@ import { useModules } from "../(context)/ModulesDataProvider";
 import { useGrades } from "../(context)/GradesProvider";
 
 export default function AddModulesStep2() {
-  const { selectedLevels, setCurrentStep } = useAddModule();
+  const { selectedLevels, setSelectedLevels, setCurrentStep } = useAddModule();
   const { data } = useModules();
   const {
     modulesWithGrades,
@@ -28,7 +28,9 @@ export default function AddModulesStep2() {
 
   const highlight =
     "text-sub mr-6 font-semibold text-text-dark underline cursor-pointer";
-  const disabled = "text-sub mr-6 font-semibold text-gray-400 cursor-pointer";
+  const disabled =
+    "text-sub mr-6 font-semibold text-gray-400 cursor-pointer";
+  const hide = "hidden";
 
   const handleSelectedLevel = (level: number) => {
     if (level === 4) {
@@ -93,21 +95,21 @@ export default function AddModulesStep2() {
           <div>
             <button
               type="button"
-              className={levelTable == 4 ? highlight : disabled}
+              className={levelTable == 4 ? highlight : (selectedLevels.includes(4) ? disabled : hide)}
               onClick={() => handleSelectedLevel(4)}
             >
               Level 4
             </button>
             <button
               type="button"
-              className={levelTable == 5 ? highlight : disabled}
+              className={levelTable == 5 ? highlight : (selectedLevels.includes(5) ? disabled : hide)}
               onClick={() => handleSelectedLevel(5)}
             >
               Level 5
             </button>
             <button
               type="button"
-              className={levelTable == 6 ? highlight : disabled}
+              className={levelTable == 6 ? highlight : (selectedLevels.includes(6) ? disabled : hide)}
               onClick={() => handleSelectedLevel(6)}
             >
               Level 6
@@ -176,6 +178,7 @@ export default function AddModulesStep2() {
               type="button"
               className="text-body font-regular text-background bg-primary-dark flex w-75 cursor-pointer flex-row items-center justify-center rounded-lg p-2"
               onClick={() => {
+                setSelectedLevels([]);
                 setCurrentStep(1);
               }}
             >
