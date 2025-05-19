@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
+const { authenticate } = require("../middlewares/authMiddleware"); // Add this import
 const {
   validateAddModules,
   validateModuleUpdate,
@@ -19,21 +20,23 @@ router.get("/", catchAsync(getModules));
 // add one or more modules for the authenticated user
 router.post(
   "/",
-  validateAddModules, // <— now matches moduleValidator export
+  authenticate,
+  validateAddModules,
   catchAsync(addModule)
 );
 
 // list my modules
-router.get("/mine", catchAsync(getUserModules));
+router.get("/mine", authenticate, catchAsync(getUserModules));
 
 // edit a single module by code
 router.put(
   "/:moduleCode",
-  validateModuleUpdate, // <— new name
+  authenticate,
+  validateModuleUpdate,
   catchAsync(editModule)
 );
 
 // delete a module by code
-router.delete("/:moduleCode", catchAsync(deleteModule));
+router.delete("/:moduleCode", authenticate, catchAsync(deleteModule));
 
 module.exports = router;

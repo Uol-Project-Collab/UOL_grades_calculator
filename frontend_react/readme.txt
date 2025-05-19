@@ -1,0 +1,2 @@
+`use npm ci` to install modules instead of npm install so not to update packages that dont need to.
+This is to only use stable environment instead of installing latest package which might break our code.

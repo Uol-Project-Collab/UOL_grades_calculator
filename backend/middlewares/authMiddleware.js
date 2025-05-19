@@ -1,12 +1,22 @@
 const { db, auth } = require('../config/firebase');
 
 exports.authenticate = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+  // Get token from either cookies or Authorization header
+  let token;
+  
+  // Check cookies first (for web clients)
+  if (req.cookies && req.cookies.authToken) {
+    token = req.cookies.authToken;
+  } 
+  // Fall back to Authorization header (for API clients)
+  else if (req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required' });
   }
 
-  const token = authHeader.split(' ')[1];
   try {
     const decodedToken = await auth.verifyIdToken(token, /* checkRevoked */ true);
     const userDoc = await db.collection('students').doc(decodedToken.uid).get();

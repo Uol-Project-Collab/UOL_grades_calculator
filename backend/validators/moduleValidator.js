@@ -6,6 +6,10 @@ const moduleSchema = Joi.object({
     'string.empty': 'Module Code cannot be empty',
     'any.required': 'Module Code is required',
   }),
+  moduleInfo: Joi.object({
+    name: Joi.string().required(),
+    level: Joi.number().required(),
+  }).required(),
   grade: Joi.string()
     .required()
     .custom((value, helper) => {
