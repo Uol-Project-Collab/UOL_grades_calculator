@@ -9,20 +9,20 @@ import { useGrades } from "../(context)/GradesProvider";
 export default function AddModulesStep2() {
   const { selectedLevels, setCurrentStep } = useAddModule();
   const { data } = useModules();
-  const { 
-    modulesWithGrades, 
-    setModuleWithGrade, 
-    updateGrade, 
-    updateRplStatus, 
-    hasModule 
+  const {
+    modulesWithGrades,
+    setModuleWithGrade,
+    updateGrade,
+    updateRplStatus,
+    hasModule,
   } = useGrades();
-  
+
   const [levelTable, setLevelTable] = useState(selectedLevels[0]);
-  
+
   let displayModules = [];
-  if(data){
+  if (data) {
     displayModules = data.modules.filter(
-      module => module.level === levelTable
+      (module) => module.level === levelTable,
     );
   }
 
@@ -43,10 +43,11 @@ export default function AddModulesStep2() {
   const handleGradeChange = (module: any, value: string) => {
     // Only allow numbers between 0-100
     if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= 100)) {
-      const isRpl = hasModule(module.moduleCode) 
-        ? modulesWithGrades.find(m => m.moduleCode === module.moduleCode)?.isRpl || false
+      const isRpl = hasModule(module.moduleCode)
+        ? modulesWithGrades.find((m) => m.moduleCode === module.moduleCode)
+            ?.isRpl || false
         : false;
-        
+
       if (hasModule(module.moduleCode)) {
         updateGrade(module.moduleCode, value);
       } else {
@@ -57,9 +58,10 @@ export default function AddModulesStep2() {
 
   const handleRplChange = (module: any, checked: boolean) => {
     const grade = hasModule(module.moduleCode)
-      ? modulesWithGrades.find(m => m.moduleCode === module.moduleCode)?.grade || ""
+      ? modulesWithGrades.find((m) => m.moduleCode === module.moduleCode)
+          ?.grade || ""
       : "";
-      
+
     if (hasModule(module.moduleCode)) {
       updateRplStatus(module.moduleCode, checked);
     } else {
@@ -69,13 +71,13 @@ export default function AddModulesStep2() {
 
   // Helper function to get the current grade for a module
   const getModuleGrade = (moduleCode: string): string => {
-    const module = modulesWithGrades.find(m => m.moduleCode === moduleCode);
+    const module = modulesWithGrades.find((m) => m.moduleCode === moduleCode);
     return module ? module.grade : "";
   };
 
   // Helper function to get the current RPL status for a module
   const getModuleRplStatus = (moduleCode: string): boolean => {
-    const module = modulesWithGrades.find(m => m.moduleCode === moduleCode);
+    const module = modulesWithGrades.find((m) => m.moduleCode === moduleCode);
     return module ? module.isRpl : false;
   };
 
@@ -119,7 +121,10 @@ export default function AddModulesStep2() {
         </div>
         <div className="flex flex-col">
           {displayModules.length > 0 ? (
-            <div className="mt-4 overflow-y-auto" style={{ height: "calc(8 * 60px)" }}>
+            <div
+              className="mt-4 overflow-y-auto"
+              style={{ height: "calc(8 * 60px)" }}
+            >
               <table className="w-full border-collapse">
                 <thead className="sticky top-0 bg-white">
                   <tr className="bg-gray-100">
@@ -139,7 +144,9 @@ export default function AddModulesStep2() {
                           type="text"
                           className="w-16 border p-1 text-center"
                           value={getModuleGrade(module.moduleCode)}
-                          onChange={(e) => handleGradeChange(module, e.target.value)}
+                          onChange={(e) =>
+                            handleGradeChange(module, e.target.value)
+                          }
                           placeholder="0-100"
                         />
                       </td>
@@ -148,7 +155,9 @@ export default function AddModulesStep2() {
                           type="checkbox"
                           className="h-4 w-4"
                           checked={getModuleRplStatus(module.moduleCode)}
-                          onChange={(e) => handleRplChange(module, e.target.checked)}
+                          onChange={(e) =>
+                            handleRplChange(module, e.target.checked)
+                          }
                         />
                       </td>
                     </tr>
@@ -157,10 +166,12 @@ export default function AddModulesStep2() {
               </table>
             </div>
           ) : (
-            <p className="text-gray-500 italic">No modules found for this level</p>
+            <p className="text-gray-500 italic">
+              No modules found for this level
+            </p>
           )}
-          
-          <div className="flex flex-row items-center justify-between mt-4">
+
+          <div className="mt-4 flex flex-row items-center justify-between">
             <button
               type="button"
               className="text-body font-regular text-background bg-primary-dark flex w-75 cursor-pointer flex-row items-center justify-center rounded-lg p-2"
@@ -168,7 +179,9 @@ export default function AddModulesStep2() {
                 setCurrentStep(1);
               }}
             >
-              <span className="material-symbols-outlined mr-2">arrow_left_alt</span>
+              <span className="material-symbols-outlined mr-2">
+                arrow_left_alt
+              </span>
               Back
             </button>
             <button

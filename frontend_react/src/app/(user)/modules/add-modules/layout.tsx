@@ -6,9 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <ModulesProvider>
       <AddModuleProvider>
-        <GradesProvider>
-          {children}
-        </GradesProvider>
+        <GradesProvider>{children}</GradesProvider>
       </AddModuleProvider>
     </ModulesProvider>
   );

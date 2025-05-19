@@ -9,13 +9,20 @@ interface UserDataContextType {
   fetchModules: () => Promise<void>;
 }
 
-const UserDataContext = createContext<UserDataContextType | undefined>(undefined);
+const UserDataContext = createContext<UserDataContextType | undefined>(
+  undefined,
+);
 
-export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   // Initialize with proper structure to avoid "modules is undefined" errors
-  const [userModules, setUserModules] = useState<{ success: boolean; modules: any[] }>({
+  const [userModules, setUserModules] = useState<{
+    success: boolean;
+    modules: any[];
+  }>({
     success: false,
-    modules: []
+    modules: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +54,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       {children}
     </UserDataContext.Provider>
   );
-}
+};
 
 export const useUserData = () => {
   const context = useContext(UserDataContext);
@@ -55,4 +62,4 @@ export const useUserData = () => {
     throw new Error("useUserData must be used within a UserDataProvider");
   }
   return context;
-}
+};

@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { FetchAllModules } from "../(utils)/FetchAllModules";
 
 const ModulesContext = createContext<any>(undefined);
@@ -16,7 +22,7 @@ export const ModulesProvider = ({ children }: { children: ReactNode }) => {
         console.error("Failed to load modules", error);
       }
     };
-    
+
     fetchData();
   }, []);
 

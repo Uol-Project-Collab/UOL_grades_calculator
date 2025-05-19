@@ -59,7 +59,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-primary-dark mt-2 flex  h-full w-fit flex-col justify-between rounded-2xl p-10">
+    <nav className="bg-primary-dark mt-2 flex h-full w-fit flex-col justify-between rounded-2xl p-10">
       <ul className="mt-10 flex flex-col items-start gap-4">
         <li className={navLink}>
           <span className={materialIcon}>desktop_windows</span>

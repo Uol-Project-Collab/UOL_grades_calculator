@@ -22,7 +22,7 @@ import { ProtectedRoutes } from "./(utils)/ProtectedRoutes";
  */
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-background mx-auto min-h-screen flex w-[90%] flex-col p-1 md:w-[80%] md:p-2">
+    <div className="bg-background mx-auto flex min-h-screen w-[90%] flex-col p-1 md:w-[80%] md:p-2">
       <div className="w-full pt-10 text-right">
         <h1 className="text-page text-text-dark mr-4 font-extrabold sm:ml-12 md:ml-24 lg:ml-48">
           UOL Project Collab
@@ -30,9 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <ProtectedRoutes>
-        <UserDataProvider>
-          {children}
-        </UserDataProvider>
+        <UserDataProvider>{children}</UserDataProvider>
       </ProtectedRoutes>
     </div>
   );

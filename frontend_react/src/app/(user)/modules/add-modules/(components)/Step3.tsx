@@ -13,9 +13,9 @@ export default function Step3() {
   const router = useRouter();
   // Group modules by level
   const modulesByLevel = {
-    4: modulesWithGrades.filter(module => module.level === 4),
-    5: modulesWithGrades.filter(module => module.level === 5),
-    6: modulesWithGrades.filter(module => module.level === 6)
+    4: modulesWithGrades.filter((module) => module.level === 4),
+    5: modulesWithGrades.filter((module) => module.level === 5),
+    6: modulesWithGrades.filter((module) => module.level === 6),
   };
 
   // Calculate summary statistics
@@ -48,9 +48,12 @@ export default function Step3() {
   const handleSubmission = async () => {
     try {
       // First check if user is authenticated
-      const authCheck = await axios.get("http://localhost:3000/api/auth/verify-session", {
-        withCredentials: true,
-      });
+      const authCheck = await axios.get(
+        "http://localhost:3000/api/auth/verify-session",
+        {
+          withCredentials: true,
+        },
+      );
 
       if (!authCheck.data.authenticated) {
         alert("You are not authenticated. Please log in again.");
@@ -61,7 +64,10 @@ export default function Step3() {
 
       // Prepare valid modules for submission
       const validModules = modulesWithGrades
-        .filter(module => module.isRpl || (module.grade && module.grade.trim() !== ""))
+        .filter(
+          (module) =>
+            module.isRpl || (module.grade && module.grade.trim() !== ""),
+        )
         .map(({ moduleCode, level, moduleName, grade, isRpl }) => ({
           moduleCode,
           level,
@@ -83,7 +89,7 @@ export default function Step3() {
       console.error("SubmitModules failed:", error);
       alert("Failed to submit modules. Please check console for details.");
     }
-  }
+  };
 
   // Column width styles to ensure consistency across all tables
   const columnStyles = {
@@ -93,45 +99,81 @@ export default function Step3() {
     grade: "w-1/12",
     classification: "w-1/6",
     rpl: "w-1/12",
-    actions: "w-1/12"
+    actions: "w-1/12",
   };
 
   const renderModuleTable = (level: number) => {
     const modules = modulesByLevel[level];
-    
+
     if (!modules || modules.length === 0) {
-      return <p className="text-gray-500 italic mt-2 mb-6">No modules selected for Level {level}</p>;
+      return (
+        <p className="mt-2 mb-6 text-gray-500 italic">
+          No modules selected for Level {level}
+        </p>
+      );
     }
 
     return (
       <div className="mb-8">
-        <h3 className="font-semibold text-lg mb-2">Level {level} Modules</h3>
+        <h3 className="mb-2 text-lg font-semibold">Level {level} Modules</h3>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse table-fixed">
+          <table className="w-full table-fixed border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className={`border p-2 text-left ${columnStyles.moduleCode}`}>Module Code</th>
-                <th className={`border p-2 text-left ${columnStyles.moduleName}`}>Module Name</th>
-                <th className={`border p-2 text-center ${columnStyles.credits}`}>Credits</th>
-                <th className={`border p-2 text-center ${columnStyles.grade}`}>Grade</th>
-                <th className={`border p-2 text-center ${columnStyles.classification}`}>Classification</th>
-                <th className={`border p-2 text-center ${columnStyles.rpl}`}>RPL</th>
-                <th className={`border p-2 text-center ${columnStyles.actions}`}>Actions</th>
+                <th
+                  className={`border p-2 text-left ${columnStyles.moduleCode}`}
+                >
+                  Module Code
+                </th>
+                <th
+                  className={`border p-2 text-left ${columnStyles.moduleName}`}
+                >
+                  Module Name
+                </th>
+                <th
+                  className={`border p-2 text-center ${columnStyles.credits}`}
+                >
+                  Credits
+                </th>
+                <th className={`border p-2 text-center ${columnStyles.grade}`}>
+                  Grade
+                </th>
+                <th
+                  className={`border p-2 text-center ${columnStyles.classification}`}
+                >
+                  Classification
+                </th>
+                <th className={`border p-2 text-center ${columnStyles.rpl}`}>
+                  RPL
+                </th>
+                <th
+                  className={`border p-2 text-center ${columnStyles.actions}`}
+                >
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              {modules.map(module => (
+              {modules.map((module) => (
                 <tr key={module.moduleCode} className="hover:bg-gray-50">
                   <td className="border p-2">{module.moduleCode}</td>
                   <td className="border p-2">{module.moduleName}</td>
                   <td className="border p-2 text-center">
-                    {module.moduleCode === "CM3070" ? (module.credits || 30) : (module.credits || 15)}
+                    {module.moduleCode === "CM3070"
+                      ? module.credits || 30
+                      : module.credits || 15}
                   </td>
-                  <td className="border p-2 text-center">{module.grade || "-"}</td>
-                  <td className="border p-2 text-center">{getClassification(module.grade)}</td>
-                  <td className="border p-2 text-center">{module.isRpl ? "Yes" : "No"}</td>
                   <td className="border p-2 text-center">
-                    <button 
+                    {module.grade || "-"}
+                  </td>
+                  <td className="border p-2 text-center">
+                    {getClassification(module.grade)}
+                  </td>
+                  <td className="border p-2 text-center">
+                    {module.isRpl ? "Yes" : "No"}
+                  </td>
+                  <td className="border p-2 text-center">
+                    <button
                       onClick={() => removeModule(module.moduleCode)}
                       className="text-red-500 hover:text-red-700"
                     >
@@ -150,7 +192,7 @@ export default function Step3() {
   return (
     <>
       <AddModulesHeader message="Review Selected Modules" />
-      
+
       <div className="flex min-h-[calc(100vh-200px)] flex-col pb-12">
         {/* <div className="bg-white shadow-md rounded-lg p-6 mt-6 mb-8">
           <h3 className="text-2xl font-extrabold mb-4 text-gray-800">Summary</h3>
@@ -175,8 +217,8 @@ export default function Step3() {
         {selectedLevels.includes(4) && renderModuleTable(4)}
         {selectedLevels.includes(5) && renderModuleTable(5)}
         {selectedLevels.includes(6) && renderModuleTable(6)}
-        
-        <div className="flex flex-row items-center justify-between mt-auto pt-4">
+
+        <div className="mt-auto flex flex-row items-center justify-between pt-4">
           <button
             type="button"
             className="text-body font-regular text-background bg-primary-dark flex w-75 cursor-pointer flex-row items-center justify-center rounded-lg p-2"
@@ -184,7 +226,9 @@ export default function Step3() {
               setCurrentStep(2);
             }}
           >
-            <span className="material-symbols-outlined mr-2">arrow_left_alt</span>
+            <span className="material-symbols-outlined mr-2">
+              arrow_left_alt
+            </span>
             Back
           </button>
           <button
@@ -193,9 +237,7 @@ export default function Step3() {
             onClick={handleSubmission}
           >
             Submit
-            <span className="material-symbols-outlined ml-2">
-              check
-            </span>
+            <span className="material-symbols-outlined ml-2">check</span>
           </button>
         </div>
       </div>

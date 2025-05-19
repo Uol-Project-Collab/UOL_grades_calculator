@@ -55,9 +55,7 @@ export default function RootLayout({
         />
         <link rel="shortcut icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="background min-h-screen">
-        {children}
-      </body>
+      <body className="background min-h-screen">{children}</body>
     </html>
   );
 }

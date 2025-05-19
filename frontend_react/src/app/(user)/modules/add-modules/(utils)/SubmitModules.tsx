@@ -4,9 +4,9 @@ import { FetchCsrfToken } from "../../../../(utils)/FetchCsrfToken";
 export const SubmitModules = async (modulesData) => {
   try {
     const csrfToken = await FetchCsrfToken();
-    
+
     // Transform modulesData to match Firestore rules
-    const transformedModules = modulesData.map(module => ({
+    const transformedModules = modulesData.map((module) => ({
       moduleCode: module.moduleCode,
       moduleInfo: {
         name: module.moduleName,
@@ -26,7 +26,7 @@ export const SubmitModules = async (modulesData) => {
           "X-CSRF-Token": csrfToken,
         },
         withCredentials: true,
-      }
+      },
     );
   } catch (error) {
     console.error("Error submitting modules:", error);

@@ -40,13 +40,14 @@ export default function Modules() {
   const { userModules, loading } = useUserData();
   const [levelTable, setLevelTable] = useState(4);
 
-  const highlight = "text-sub text-text-dark mr-6 font-semibold cursor-pointer underline";
+  const highlight =
+    "text-sub text-text-dark mr-6 font-semibold cursor-pointer underline";
   const disabled = "text-sub mr-6 font-semibold text-gray-400 cursor-pointer";
 
   let displayModules = [];
-  if(userModules){
+  if (userModules) {
     displayModules = userModules.modules.filter(
-      module => module.level === levelTable
+      (module) => module.level === levelTable,
     );
   }
 
@@ -59,16 +60,16 @@ export default function Modules() {
           message="Switch tabs to see different levels of modules."
         />
       </div>
-      
+
       {/* Main content area - Navbar on left, Content on right */}
-      <div className="flex flex-row flex-1">
+      <div className="flex flex-1 flex-row">
         {/* Navbar */}
         <div className="flex-shrink-0">
           <Navbar />
         </div>
-        
+
         {/* Content area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex flex-1 flex-col">
           {/* Module level selection and Add button */}
           <div className="flex flex-row items-center justify-between p-6">
             <div className="flex w-fit flex-row">
@@ -105,15 +106,17 @@ export default function Modules() {
               </button>
             </div>
           </div>
-          
+
           {/* Module cards */}
-          <div className="flex w-full flex-row flex-wrap gap-4 pl-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="flex max-h-[calc(100vh-200px)] w-full flex-row flex-wrap gap-4 overflow-y-auto pl-6">
             {loading ? (
               <p>Loading modules...</p>
             ) : displayModules.length === 0 ? (
-              <div className="flex flex-col items-center justify-center w-full py-8">
-                <p className="text-gray-500 mb-2">No modules found</p>
-                <p className="text-gray-400">Try adding some modules using the "Add Module" button above</p>
+              <div className="flex w-full flex-col items-center justify-center py-8">
+                <p className="mb-2 text-gray-500">No modules found</p>
+                <p className="text-gray-400">
+                  Try adding some modules using the "Add Module" button above
+                </p>
               </div>
             ) : (
               displayModules.map((module, index) => (

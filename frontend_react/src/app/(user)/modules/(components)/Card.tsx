@@ -5,16 +5,16 @@ interface CardProps {
   key?: React.Key;
   moduleName: string;
   moduleCode: string;
-  grade: number;  
+  grade: number;
 }
 
 /**
  * A React functional component that represents a card displaying module information
  * and a visual representation of the grade percentage.
- * 
+ *
  * @example
  * <Card moduleName="Mathematics" moduleCode="MATH101" grade={85} />
- * 
+ *
  * @remarks
  * - The circular progress indicator is implemented using an SVG element with
  *   two circles, where the second circle's strokeDasharray is dynamically

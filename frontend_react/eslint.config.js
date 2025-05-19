@@ -1,19 +1,19 @@
 import { defineConfig } from "eslint/config";
-import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
-import typescriptEslintParser from '@typescript-eslint/parser';
+import typescriptEslintPlugin from "@typescript-eslint/eslint-plugin";
+import typescriptEslintParser from "@typescript-eslint/parser";
 
 export default defineConfig([
   {
-    files: ['**/*.tsx'],
+    files: ["**/*.tsx"],
     languageOptions: {
       parser: typescriptEslintParser,
       parserOptions: {
         ecmaVersion: 2024,
-        sourceType: 'module',
+        sourceType: "module",
       },
     },
     plugins: {
-      '@typescript-eslint': typescriptEslintPlugin,
+      "@typescript-eslint": typescriptEslintPlugin,
     },
     rules: {
       ...typescriptEslintPlugin.configs.recommended.rules,
