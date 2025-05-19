@@ -38,36 +38,58 @@ import { useUserData } from "../../(context)/UserData";
 export default function Modules() {
   const router = useRouter();
   const { userModules, loading } = useUserData();
+  const [levelTable, setLevelTable] = useState(4);
 
-  console.log("Modules:", userModules);
+  const highlight = "text-sub text-text-dark mr-6 font-semibold cursor-pointer underline";
+  const disabled = "text-sub mr-6 font-semibold text-gray-400 cursor-pointer";
+
+  let displayModules = [];
+  if(userModules){
+    displayModules = userModules.modules.filter(
+      module => module.level === levelTable
+    );
+  }
 
   return (
     <>
-      <Header
-        title="Your Current Modules"
-        message="Switch tabs to see different levels of modules."
-      />
-
-      <div className="flex h-full w-full flex-row">
-        <Navbar />
-        <div className="w-full">
+      {/* Header - Full width */}
+      <div className="w-full">
+        <Header
+          title="Your Current Modules"
+          message="Switch tabs to see different levels of modules."
+        />
+      </div>
+      
+      {/* Main content area - Navbar on left, Content on right */}
+      <div className="flex flex-row flex-1">
+        {/* Navbar */}
+        <div className="flex-shrink-0">
+          <Navbar />
+        </div>
+        
+        {/* Content area */}
+        <div className="flex-1 flex flex-col">
+          {/* Module level selection and Add button */}
           <div className="flex flex-row items-center justify-between p-6">
             <div className="flex w-fit flex-row">
               <button
                 type="button"
-                className="text-sub text-text-dark mr-6 font-semibold underline"
+                className={levelTable === 4 ? highlight : disabled}
+                onClick={() => setLevelTable(4)}
               >
                 Level 4
               </button>
               <button
                 type="button"
-                className="text-sub mr-6 font-semibold text-gray-400"
+                className={levelTable === 5 ? highlight : disabled}
+                onClick={() => setLevelTable(5)}
               >
                 Level 5
               </button>
               <button
                 type="button"
-                className="text-sub mr-6 font-semibold text-gray-400"
+                className={levelTable === 6 ? highlight : disabled}
+                onClick={() => setLevelTable(6)}
               >
                 Level 6
               </button>
@@ -83,22 +105,24 @@ export default function Modules() {
               </button>
             </div>
           </div>
-          <div className="flex w-full flex-row flex-wrap pl-6">
+          
+          {/* Module cards */}
+          <div className="flex w-full flex-row flex-wrap gap-4 pl-6 overflow-y-auto max-h-[calc(100vh-200px)]">
             {loading ? (
               <p>Loading modules...</p>
-            ) : userModules.modules.length === 0 ? (
+            ) : displayModules.length === 0 ? (
               <div className="flex flex-col items-center justify-center w-full py-8">
-              <p className="text-gray-500 mb-2">No modules found</p>
-              <p className="text-gray-400">Try adding some modules using the "Add Module" button above</p>
+                <p className="text-gray-500 mb-2">No modules found</p>
+                <p className="text-gray-400">Try adding some modules using the "Add Module" button above</p>
               </div>
             ) : (
-              userModules.modules.map((module, index) => (
-              <Card
-                key={`${module.moduleCode}-${index}`}
-                moduleName={module.moduleName}
-                moduleCode={module.moduleCode}
-                grade={module.grade}
-              />
+              displayModules.map((module, index) => (
+                <Card
+                  key={`${module.moduleCode}-${index}`}
+                  moduleName={module.moduleName}
+                  moduleCode={module.moduleCode}
+                  grade={module.grade}
+                />
               ))
             )}
           </div>
