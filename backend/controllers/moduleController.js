@@ -15,22 +15,43 @@ exports.getModules = async (req, res) => {
 // 2. Add module to student
 exports.addModule = async (req, res) => {
   const studentId = req.user.uid;
-  const { modules } = req.body; // array of { moduleCode, grade }
+  const { modules } = req.body; // array of { moduleCode, moduleInfo: { name, level }, grade }
+
+  // Validate the payload
+  if (!Array.isArray(modules) || modules.length === 0) {
+    return res.status(400).json({ error: "Invalid payload: 'modules' must be a non-empty array." });
+  }
+  
   const studentRef = db.collection('students').doc(studentId);
   const studentDoc = await studentRef.get();
+
   if (!studentDoc.exists) {
-    const err = new Error('Student not found'); err.statusCode = 404; throw err;
+    const err = new Error('Student not found');
+    err.statusCode = 404;
+    throw err;
   }
+
   const existing = studentDoc.data().modules || [];
   const newModules = [];
+
   modules.forEach(m => {
     if (!existing.some(e => e.moduleCode === m.moduleCode)) {
-      newModules.push({ ...m, createdAt: new Date().toISOString() });
+      newModules.push({
+        moduleCode: m.moduleCode,
+        moduleName: m.moduleInfo.name, // Extract name from moduleInfo
+        level: m.moduleInfo.level,    // Extract level from moduleInfo
+        grade: m.grade,
+        createdAt: new Date().toISOString(),
+      });
     }
   });
+
   if (newModules.length === 0) {
-    const err = new Error('No new modules to add'); err.statusCode = 400; throw err;
+    const err = new Error('No new modules to add');
+    err.statusCode = 400;
+    throw err;
   }
+
   await studentRef.update({ modules: [...existing, ...newModules] });
   res.status(201).json({ success: true, addedModules: newModules });
 };
