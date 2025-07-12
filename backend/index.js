@@ -12,7 +12,7 @@ const gradesRoutes = require('./routes/avgGradesRoutes');
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3001", "https://your-production-url.com"];
+const allowedOrigins = ["http://localhost:3000", "http://localhost:3001", "https://your-production-url.com"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (allowedOrigins.includes(origin) || !origin) {
